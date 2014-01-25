@@ -1,6 +1,7 @@
 package  
 {
 	import org.flixel.FlxGroup;
+	import org.flixel.FlxObject;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxRect;
 	import org.flixel.FlxState;
@@ -13,9 +14,13 @@ package
 	 */
 	public class PlayState extends FlxState
 	{
+		
+		public const RESPAWN_DIST : int = 100;
+		
 		public var map:FlxTilemap;
 		public var p1:Player;
 		public var p2:Player;
+		public var dummy:FlxObject = new FlxObject();
 		public var players:FlxGroup = new FlxGroup();
 		
 		public var goal:Goal;
@@ -53,12 +58,14 @@ package
 			add(p1);
 			add(p2);
 			
+			FlxG.camera.follow(dummy, FlxCamera.STYLE_PLATFORMER);
+			
 			goal = new Goal(map.x + map.width - 200, 0);
 			add(goal);
 			
 			FlxG.worldBounds = new FlxRect(map.x, map.y, map.width, map.height);
 			FlxG.camera.setBounds(0, 0, map.width, map.height);
-			FlxG.camera.follow(p2, FlxCamera.STYLE_PLATFORMER);
+			PickCamera();
 		}
 		
 		/**
@@ -80,7 +87,54 @@ package
 			FlxG.collide(map, players);
 			FlxG.collide(map, goal);
 			FlxG.collide(players);
-		}	
+			
+			PickCamera();
+			RespawnIfOutOfScreen();
+		}
+		
+		private function PickCamera()
+		{
+			if ( p1.x > p2.x )
+			{
+				dummy.x = Utils.Lerp(dummy.x, p1.x, 0.1);
+			}
+			else
+			{
+				dummy.x = Utils.Lerp(dummy.x, p2.x, 0.1);
+			}
+		}
+		
+		private function RespawnIfOutOfScreen():void
+		{
+			if ( ! p1.onScreen() )
+			{
+				Respawn(p1, p2);
+			}
+			else if ( ! p2.onScreen() )
+			{
+				Respawn(p2, p1);
+			}
+		}
+		
+		private function Respawn( pToRespawn:Player, target:Player):void 
+		{
+			var spawnX : int = target.x + RESPAWN_DIST;
+			var tileSize : int = map.width / map.widthInTiles;
+			var column : int = (spawnX / map.width) * map.widthInTiles;
+			
+			for ( var i : int = map.heightInTiles ; i > 0 ; --i )
+			{
+				var tile : int = map.getTile(column, i);
+				if ( tile != 0 )
+				{
+					var spawnY = (tileSize * i)-pToRespawn.height;
+					break;
+				}
+			}
+			
+			pToRespawn.x = spawnX;
+			pToRespawn.y = spawnY;
+		}
 	}
 
 }

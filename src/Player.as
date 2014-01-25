@@ -6,17 +6,13 @@ package
 
 	public class Player extends FlxSprite
 	{
-		public static const INIT_SPEED:int = 400;
-		public static const INIT_GRAVITY:int =420;
-		public static const INIT_JUMP_SPEED:int = 420;
-		public static const INIT_DRAG_SPEED:int = 200;
-		public static const INIT_MAX_SPEED:int = 200;
 		
 		public var RUN_SPEED:int = 400;
 		public var GRAVITY:int = 420;
 		public var JUMP_SPEED:int = 420;
 		public var DRAG_SPEED:int = 200;
 		public var MAX_SPEED:int = 400;
+		public var MAX_JUMP:int = 2;
 		
 		public var defaultkeys:Boolean;
 		
@@ -27,6 +23,7 @@ package
 		public var bar:FlxBar;
 		public var status:FlxText;
 		public var insult:FlxText;
+		public var curNbJump:int = 0;
 		
 		public var lvl:PlayState;
 		
@@ -144,10 +141,9 @@ package
 					//velocity.y = -JUMP_SPEED;
 					//FlxG.play(SndJump);
 				}
-				if(FlxG.keys.justPressed("SPACE") && !velocity.y)
+				if(FlxG.keys.justPressed("SPACE") && CanJump() )
 				{
-					velocity.y = -JUMP_SPEED;
-					play("Jump");
+					Jump();
 					//FlxG.play(SndJump);
 				}
 			}
@@ -171,10 +167,9 @@ package
 					//velocity.y = -JUMP_SPEED;
 					//FlxG.play(SndJump);
 				}
-				if(FlxG.keys.justPressed("SPACE") && !velocity.y)
+				if(FlxG.keys.justPressed("SPACE") && CanJump())
 				{
-					play("Jump");
-					velocity.y = -JUMP_SPEED;
+					Jump();
 					//FlxG.play(SndJump);
 				}
 			}
@@ -286,6 +281,21 @@ package
 			insult.text = ins;
 			insult.color = 0xff000000;
 		}
+	}
+	
+	private function CanJump():Boolean
+	{
+		var grounded : Boolean = isTouching(FlxObject.FLOOR);
+		if (grounded) curNbJump = 0;
+		
+		return grounded || curNbJump < MAX_JUMP;
+	}
+	
+	private function Jump():void 
+	{
+		curNbJump++;
+		velocity.y = -JUMP_SPEED;
+		play("Jump");
 	}
 }
 }
