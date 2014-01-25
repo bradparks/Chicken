@@ -32,7 +32,7 @@ package
 		
 		public var emitter:FlxEmitter;
 		
-		public var currentanimal:String = "turtle";
+		public var currentanimal:String = "human";
 		
 		public function Player(_x:int, _y:int, color:uint = 0xffffffff, defaultKeyset:Boolean = true):void
 		{                
@@ -41,13 +41,18 @@ package
 			
 			defaultkeys = defaultKeyset;
 			
-			//loadGraphic(ImgSpaceman,true,true,8);
-			//loadGraphic(
-			loadGraphic(Assets.TURTLE, true, true, 68, 32);
+			//loadGraphic(Assets.TURTLE, true, true, 68, 32);
+			loadGraphic(Assets.HUMAN, true, true, 38, 100);
+			
 			//loadGraphic(Assets.PIG, true, true, 64, 44);
-			addAnimation("Idle", [3, 4, 5], 2, true);
-			addAnimation("Walk", [0, 1, 2], 6, true);
-			addAnimation("Jump", [6, 7, 8], 2, false);
+			
+			//addAnimation("Idle", [3, 4, 5], 2, true);
+			//addAnimation("Walk", [0, 1, 2], 6, true);
+			//addAnimation("Jump", [6, 7, 8], 2, false);
+			
+			addAnimation("Idle", [5, 6], 2, true);
+			addAnimation("Walk", [0, 1, 2, 3, 4, ], 6, true);
+			addAnimation("Jump", [0, 1, 2, 3, 4, ], 2, false);
 			
 			drag.x = DRAG_SPEED;  // Drag is how quickly you slow down when you're not pushing a button. By using a multiplier, it will always scale to the run speed, even if we change it.
             acceleration.y = GRAVITY; // Always try to push helmutguy in the direction of gravity
@@ -82,7 +87,7 @@ package
 			{
 				bar = new FlxBar(FlxG.width - 200, 0, FlxBar.FILL_LEFT_TO_RIGHT, 200, 20, this, "insultpower");
 				
-				status = new FlxText(FlxG.width - 200, 30, 200, "You are a turtle");
+				status = new FlxText(FlxG.width - 200, 30, 200, "You are a human");
 			}
 			
 			status.size = 12;
@@ -180,14 +185,14 @@ package
 				//else if(_aim == DOWN) play("jump_down");
 				//else play("jump");
 			//}
-			if (velocity.x == 0 && !velocity.y)
+			if (velocity.x == 0 && isTouching(FlxObject.DOWN))
 			{
 				play("Idle");
 			}
 			
 			else
 			{
-				if (!velocity.y) play("Walk");
+				if (isTouching(FlxObject.DOWN)) play("Walk");
 			}
 			//else
 			//{
@@ -219,6 +224,8 @@ package
 				if (ins.search(ani) != -1)
 				{
 					enemy.status.text = "You are a " + ani;
+					//var tempy:int = y;
+					var tempheight:int = enemy.height;
 					//trace(ani, ins);
 					enemy.currentanimal = ani;
 					var sprite:SpriteHolder = Assets.animaldict[ani] as SpriteHolder;
@@ -226,15 +233,28 @@ package
 					enemy.width = sprite.fwidth;
 					enemy.height = sprite.fheight;
 					
-					enemy.addAnimation("Idle", [3, 4, 5], 2, true);
-					enemy.addAnimation("Walk", [0, 1, 2], 6, true);
-					enemy.addAnimation("Jump", [6, 7, 8], 2, false);
+					//enemy.y -= enemy.height - tempheight;
+					
+					if (ani != "human")
+					{
+						enemy.addAnimation("Idle", [3, 4, 5], 2, true);
+						enemy.addAnimation("Walk", [0, 1, 2], sprite.walkfps, true);
+						enemy.addAnimation("Jump", [6, 7, 8], 2, false);
+					}
+					
+					else
+					{
+						enemy.addAnimation("Idle", [5, 6], 2, true);
+						enemy.addAnimation("Walk", [0, 1, 2, 3, 4, ], 6, true);
+						enemy.addAnimation("Jump", [0, 1, 2, 3, 4, ], 2, false);
+					}
 					
 					enemy.JUMP_SPEED = sprite.JUMP_SPEED;
 					enemy.GRAVITY = sprite.GRAVITY;
 					enemy.RUN_SPEED = sprite.RUN_SPEED;
 					enemy.DRAG_SPEED = sprite.DRAG_SPEED;
 					
+					enemy.y -= enemy.height - tempheight;
 					enemy.velocity.y -= 100;
 				}
 			}

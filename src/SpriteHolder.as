@@ -11,6 +11,7 @@ package
 		public var anim:Class;
 		public var fwidth:int;
 		public var fheight:int;
+		public var walkfps:Number = 6;
 		
 		public var RUN_SPEED:int = 400;
 		public var GRAVITY:int = 420;

@@ -7,7 +7,7 @@ package
 	 */
 	public class Assets 
 	{
-		[Embed(source="../assets/images/forest.png")]
+		[Embed(source="../assets/images/Tuiles_32.png")]
         public static const FOREST:Class;
 		
 		[Embed(source="../assets/images/turtle3.png")]
@@ -15,6 +15,12 @@ package
 		
 		[Embed(source="../assets/images/pig.png")]
         public static const PIG:Class;
+		
+		[Embed(source="../assets/images/human_walk_idle.png")]
+        public static const HUMAN:Class;
+		
+		[Embed(source="../assets/images/ChickenSprite.png")]
+        public static const CHICKEN:Class;
 		
 		[Embed(source="../assets/lvls/mapCSV_Group1_Map1.csv", mimeType="application/octet-stream")]
 		public static const LEVEL:Class;
@@ -28,7 +34,7 @@ package
 		public static var CASUAL_INSULTS:Array = [];
 		public static var INSULTS_OF_DEATH:Array = [];
 		
-		public static var animals:Array = ["pig", "chicken", "turtle"];
+		public static var animals:Array = ["pig", "chicken", "turtle", "human", "chicken"];
 		
 		public static var animaldict:Dictionary = new Dictionary();
 		
@@ -60,8 +66,25 @@ package
 			turtle.DRAG_SPEED = 200;
 			turtle.MAX_SPEED = 200;
 			
+			var human:SpriteHolder = new SpriteHolder(HUMAN, 38, 100);
+			human.GRAVITY = 420;
+			human.JUMP_SPEED = 200;
+			human.RUN_SPEED = 230;
+			human.DRAG_SPEED = 500;
+			human.MAX_SPEED = 230;
+			
+			var chicken:SpriteHolder = new SpriteHolder(CHICKEN, 48, 46);
+			chicken.GRAVITY = 420;
+			chicken.JUMP_SPEED = 200;
+			chicken.RUN_SPEED = 400;
+			chicken.DRAG_SPEED = 400;
+			chicken.MAX_SPEED = 400;
+			chicken.walkfps = 18;
+			
 			animaldict["pig"] = pig;
 			animaldict["turtle"] = turtle;
+			animaldict["human"] = human;
+			animaldict["chicken"] = chicken;
 		}
 		
 	}
