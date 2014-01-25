@@ -230,10 +230,10 @@ package
 					enemy.addAnimation("Walk", [0, 1, 2], 6, true);
 					enemy.addAnimation("Jump", [6, 7, 8], 2, false);
 					
-					enemy.JUMP_SPEED = FlxMath.randFloat(0.5, 2) * INIT_JUMP_SPEED;
-					enemy.GRAVITY = FlxMath.randFloat(0.5, 2) * INIT_GRAVITY;
-					enemy.RUN_SPEED = FlxMath.randFloat(0.5, 2) * INIT_SPEED;
-					enemy.DRAG_SPEED = FlxMath.randFloat(0.5, 2) * INIT_DRAG_SPEED;
+					enemy.JUMP_SPEED = sprite.JUMP_SPEED;
+					enemy.GRAVITY = sprite.GRAVITY;
+					enemy.RUN_SPEED = sprite.RUN_SPEED;
+					enemy.DRAG_SPEED = sprite.DRAG_SPEED;
 					
 					enemy.velocity.y -= 100;
 				}
@@ -253,10 +253,10 @@ package
 			FlxG.shake(0.01);
 			FlxG.flash(0xffffffff);
 			insultpower = 0.0;
-			enemy.JUMP_SPEED = FlxMath.randFloat(0.5, 2) * INIT_JUMP_SPEED;
-			enemy.GRAVITY = FlxMath.randFloat(0.5, 2) * INIT_GRAVITY;
-			enemy.RUN_SPEED = FlxMath.randFloat(0.5, 2) * INIT_SPEED;
-			enemy.DRAG_SPEED = FlxMath.randFloat(0.5, 2) * INIT_DRAG_SPEED;
+			//enemy.JUMP_SPEED = FlxMath.randFloat(0.5, 2) * INIT_JUMP_SPEED;
+			//enemy.GRAVITY = FlxMath.randFloat(0.5, 2) * INIT_GRAVITY;
+			//enemy.RUN_SPEED = FlxMath.randFloat(0.5, 2) * INIT_SPEED;
+			//enemy.DRAG_SPEED = FlxMath.randFloat(0.5, 2) * INIT_DRAG_SPEED;
 		}
 		
 		//Casual insults

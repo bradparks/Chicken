@@ -22,6 +22,9 @@ package
 		[Embed(source="../assets/insults.txt", mimeType="application/octet-stream")]
 		public static const INSULTS:Class;
 		
+		[Embed(source="../assets/badinsults.txt", mimeType="application/octet-stream")]
+		public static const BADINSULTS:Class;
+		
 		public static var CASUAL_INSULTS:Array = [];
 		public static var INSULTS_OF_DEATH:Array = [];
 		
@@ -32,11 +35,11 @@ package
 		public static function ParseInsults():void 
 		{
 			var x:String = new INSULTS;
-			var low:String = x.split("\n\n", 2)[0];
-			var high:String = x.split("\n\n", 2)[1];
+			var y:String = new BADINSULTS;
 			
-			CASUAL_INSULTS = low.split("\n");
-			INSULTS_OF_DEATH = high.split("\n");
+			
+			CASUAL_INSULTS = x.split("\n");
+			INSULTS_OF_DEATH = y.split("\n");
 			
 			//trace(CASUAL_INSULTS.length, INSULTS_OF_DEATH.length);
 		}
@@ -45,12 +48,17 @@ package
 		{
 			var pig:SpriteHolder = new SpriteHolder(PIG, 64, 44);
 			pig.GRAVITY = 275;
-			pig.JUMP_SPEED = 200;
+			pig.JUMP_SPEED = 250;
 			pig.RUN_SPEED = 300;
 			pig.DRAG_SPEED = 300;
-			pig.DRAG_SPEED = 300;
+			pig.MAX_SPEED = 300;
 			
 			var turtle:SpriteHolder = new SpriteHolder(TURTLE, 68, 32);
+			turtle.GRAVITY = 420;
+			turtle.JUMP_SPEED = 340;
+			turtle.RUN_SPEED = 200;
+			turtle.DRAG_SPEED = 200;
+			turtle.MAX_SPEED = 200;
 			
 			animaldict["pig"] = pig;
 			animaldict["turtle"] = turtle;
