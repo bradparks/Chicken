@@ -16,6 +16,7 @@ package
 	{
 		
 		public const RESPAWN_DIST : int = 100;
+		public const LERP_RATE : Number = 0.2;
 		
 		public var map:FlxTilemap;
 		public var p1:Player;
@@ -86,25 +87,27 @@ package
 			
 			FlxG.collide(map, players);
 			FlxG.collide(map, goal);
-			FlxG.collide(players);
+			//FlxG.collide(players);
 			
 			PickCamera();
 			RespawnIfOutOfScreen();
 		}
 		
-		private function PickCamera()
+		private function PickCamera() : void
 		{
 			if ( p1.x > p2.x )
 			{
-				dummy.x = Utils.Lerp(dummy.x, p1.x, 0.1);
+				dummy.x = Utils.Lerp(dummy.x, p1.x, LERP_RATE);
+				dummy.y = Utils.Lerp(dummy.y, p1.y, LERP_RATE);
 			}
 			else
 			{
-				dummy.x = Utils.Lerp(dummy.x, p2.x, 0.1);
+				dummy.x = Utils.Lerp(dummy.x, p2.x, LERP_RATE);
+				dummy.y = Utils.Lerp(dummy.y, p1.y, LERP_RATE);
 			}
 		}
 		
-		private function RespawnIfOutOfScreen():void
+		private function RespawnIfOutOfScreen() : void
 		{
 			if ( ! p1.onScreen() )
 			{
@@ -122,7 +125,7 @@ package
 			var tileSize : int = map.width / map.widthInTiles;
 			var column : int = (spawnX / map.width) * map.widthInTiles;
 			
-			for ( var i : int = map.heightInTiles ; i > 0 ; --i )
+			for ( var i : int = 0 ; i < map.heightInTiles ; ++i )
 			{
 				var tile : int = map.getTile(column, i);
 				if ( tile != 0 )
