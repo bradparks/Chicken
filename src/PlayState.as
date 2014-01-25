@@ -4,6 +4,7 @@ package
 	import org.flixel.FlxObject;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxRect;
+	import org.flixel.FlxSound;
 	import org.flixel.FlxState;
 	import org.flixel.FlxTilemap;
 	import org.flixel.FlxG;
@@ -21,10 +22,13 @@ package
 		public var map:FlxTilemap;
 		public var p1:Player;
 		public var p2:Player;
-		public var dummy:FlxObject = new FlxObject();
+		public var dummy:FlxObject = new FlxObject(); // HACK
 		public var players:FlxGroup = new FlxGroup();
-		
 		public var goal:Goal;
+		
+		public var happy : FlxSound;
+		public var neutral : FlxSound;
+		public var dark : FlxSound;
 		
 		public function PlayState()
 		{
@@ -67,6 +71,11 @@ package
 			FlxG.worldBounds = new FlxRect(map.x, map.y, map.width, map.height);
 			FlxG.camera.setBounds(0, 0, map.width, map.height);
 			PickCamera();
+			
+			// Start playing main sounds
+			happy = FlxG.play(Assets.HAPPY_LOOP, 1, true);
+			neutral = FlxG.play(Assets.NEUTRAL_LOOP, 1, true);
+			dark = FlxG.play(Assets.DARK_LOOP, 1, true);
 		}
 		
 		/**
@@ -75,6 +84,10 @@ package
 		 */
 		override public function destroy():void
 		{
+			happy.stop();
+			neutral.stop();
+			dark.stop();
+			
 			super.destroy();
 		}
 
@@ -91,6 +104,7 @@ package
 			
 			PickCamera();
 			RespawnIfOutOfScreen();
+			InterpolateSound();
 		}
 		
 		private function PickCamera() : void
@@ -119,7 +133,7 @@ package
 			}
 		}
 		
-		private function Respawn( pToRespawn:Player, target:Player):void 
+		private function Respawn( pToRespawn:Player, target:Player) : void 
 		{
 			var spawnX : int = target.x + RESPAWN_DIST;
 			var tileSize : int = map.width / map.widthInTiles;
@@ -137,6 +151,26 @@ package
 			
 			pToRespawn.x = spawnX;
 			pToRespawn.y = spawnY;
+		}
+		
+		private function InterpolateSound() : void
+		{
+			var progress : Number = p1.x / map.width;
+			
+			if ( progress < 0.5 )
+			{
+				progress = progress * 2;
+				neutral.volume = progress;
+				happy.volume = 1 - progress;
+				dark.volume = 0;
+			}
+			else
+			{
+				progress = (progress - 0.5) * 2;
+				neutral.volume = 1-progress;
+				happy.volume = 0;
+				dark.volume = progress;
+			}
 		}
 	}
 
