@@ -14,14 +14,8 @@ package
 		
 		
 		// CHARA CONTROL STUFF
-		public var RUN_SPEED:int = 400;
-		public var GRAVITY:int = 420;
-		public var JUMP_SPEED:int = 420;
-		public var DRAG_SPEED:int = 200;
-		public var MAX_SPEED:int = 400;
-		public var MAX_JUMP:int = 1;
-		
 		public var defaultkeys:Boolean;
+		public var charStats : SpriteHolder;
 		
 		public var enemy:Player;
 		public var insultpower:Number = 100.0;
@@ -48,22 +42,21 @@ package
 			
 			loadGraphic(Assets.TURTLE, true, true, 68, 32);
 			//loadGraphic(Assets.HUMAN, true, true, 38, 100, true);
-			
 			//loadGraphic(Assets.PIG, true, true, 64, 44);
 			
 			addAnimation("Idle", [3, 4, 5], 2, true);
 			addAnimation("Walk", [0, 1, 2], 6, true);
 			addAnimation("Jump", [6, 7, 8], 2, false);
-			
 			//addAnimation("Idle", [5, 6], 2, true);
 			//addAnimation("Walk", [0, 1, 2, 3, 4], 6, true);
 			//addAnimation("Jump", [0, 1, 2, 3], 2, false);
 			
-			drag.x = DRAG_SPEED;  // Drag is how quickly you slow down when you're not pushing a button. By using a multiplier, it will always scale to the run speed, even if we change it.
-            acceleration.y = GRAVITY; // Always try to push helmutguy in the direction of gravity
-			drag.y = GRAVITY;
-            maxVelocity.x = RUN_SPEED;
-            maxVelocity.y = JUMP_SPEED;
+			charStats = Assets.animaldict["turtle"];
+			drag.x = charStats.DRAG_SPEED;  // Drag is how quickly you slow down when you're not pushing a button. By using a multiplier, it will always scale to the run speed, even if we change it.
+            acceleration.y = charStats.GRAVITY; // Always try to push helmutguy in the direction of charStats.GRAVITY
+			drag.y = charStats.GRAVITY;
+            maxVelocity.x = charStats.RUN_SPEED;
+            maxVelocity.y = charStats.JUMP_SPEED;
 			
 			//makeGraphic(50, 50, color);
 			
@@ -146,31 +139,31 @@ package
 			emitter.y = y + height / 2;
 			
 			acceleration.x = 0;
-			drag.y = GRAVITY;
+			drag.y = charStats.GRAVITY;
 			
 			if (defaultkeys)
 			{
 				if(FlxG.keys.J)
 				{
 					facing = LEFT;
-					acceleration.x -= DRAG_SPEED;
+					acceleration.x -= charStats.DRAG_SPEED;
 				}
 				else if(FlxG.keys.L)
 				{
 					facing = RIGHT;
 					insultpower += insultincrement;
-					acceleration.x += DRAG_SPEED;
+					acceleration.x += charStats.DRAG_SPEED;
 				}
 				if(FlxG.keys.justPressed("I"))
 				{
 					morphEnemy();
-					//velocity.y = -JUMP_SPEED;
+					//velocity.y = -charStats.JUMP_SPEED;
 					//FlxG.play(SndJump);
 				}
 				if(FlxG.keys.justPressed("SPACE") && CanJump())
 				{
 					Jump();
-					//velocity.y = -JUMP_SPEED;
+					//velocity.y = -charStats.JUMP_SPEED;
 					//play("Jump");
 					//FlxG.play(SndJump);
 				}
@@ -181,24 +174,24 @@ package
 				if(FlxG.keys.A)
 				{
 					facing = LEFT;
-					acceleration.x -= DRAG_SPEED;
+					acceleration.x -= charStats.DRAG_SPEED;
 				}
 				else if(FlxG.keys.D)
 				{
 					facing = RIGHT;
-					acceleration.x += DRAG_SPEED;
+					acceleration.x += charStats.DRAG_SPEED;
 					insultpower += insultincrement;
 				}
 				if(FlxG.keys.justPressed("W"))
 				{
 					morphEnemy();
-					//velocity.y = -JUMP_SPEED;
+					//velocity.y = -charStats.JUMP_SPEED;
 					//FlxG.play(SndJump);
 				}
 				if(FlxG.keys.justPressed("SPACE") && CanJump())
 				{
 					Jump();
-					//velocity.y = -JUMP_SPEED;
+					//velocity.y = -charStats.JUMP_SPEED;
 					//play("Jump");
 					//FlxG.play(SndJump);
 				}
@@ -253,10 +246,10 @@ package
 					var tempheight:int = enemy.height;
 					//trace(ani, ins);
 					enemy.currentanimal = ani;
-					var sprite:SpriteHolder = Assets.animaldict[ani] as SpriteHolder;
-					enemy.loadGraphic(sprite.anim, true, true, sprite.fwidth, sprite.fheight, true);
-					enemy.width = sprite.fwidth;
-					enemy.height = sprite.fheight;
+					charStats = Assets.animaldict[ani] as SpriteHolder;
+					enemy.loadGraphic(charStats.anim, true, true, charStats.fwidth, charStats.fheight, true);
+					enemy.width = charStats.fwidth;
+					enemy.height = charStats.fheight;
 					
 					//enemy.y -= enemy.height - tempheight;
 					
@@ -276,16 +269,10 @@ package
 							
 						default:
 							enemy.addAnimation("Idle", [3, 4, 5], 2, true);
-							enemy.addAnimation("Walk", [0, 1, 2], sprite.walkfps, true);
+							enemy.addAnimation("Walk", [0, 1, 2], charStats.walkfps, true);
 							enemy.addAnimation("Jump", [6, 7, 8], 2, false);
 							break;
 					}
-					
-					enemy.JUMP_SPEED = sprite.JUMP_SPEED;
-					enemy.GRAVITY = sprite.GRAVITY;
-					enemy.RUN_SPEED = sprite.RUN_SPEED;
-					enemy.DRAG_SPEED = sprite.DRAG_SPEED;
-					enemy.MAX_JUMP = sprite.MAX_JUMPS;
 					
 					//enemy.y -= enemy.height - tempheight;
 					enemy.velocity.y -= 100;
@@ -306,10 +293,10 @@ package
 			FlxG.shake(0.01);
 			FlxG.flash(0xffffffff);
 			//insultpower = 0.0;
-			//enemy.JUMP_SPEED = FlxMath.randFloat(0.5, 2) * INIT_JUMP_SPEED;
-			//enemy.GRAVITY = FlxMath.randFloat(0.5, 2) * INIT_GRAVITY;
-			//enemy.RUN_SPEED = FlxMath.randFloat(0.5, 2) * INIT_SPEED;
-			//enemy.DRAG_SPEED = FlxMath.randFloat(0.5, 2) * INIT_DRAG_SPEED;
+			//enemy.charStats.JUMP_SPEED = FlxMath.randFloat(0.5, 2) * INIT_charStats.JUMP_SPEED;
+			//enemy.charStats.GRAVITY = FlxMath.randFloat(0.5, 2) * INIT_charStats.GRAVITY;
+			//enemy.charStats.RUN_SPEED = FlxMath.randFloat(0.5, 2) * INIT_SPEED;
+			//enemy.charStats.DRAG_SPEED = FlxMath.randFloat(0.5, 2) * INIT_charStats.DRAG_SPEED;
 		}
 		
 		//Casual insults
@@ -326,13 +313,13 @@ package
 		var grounded : Boolean = isTouching(FlxObject.FLOOR);
 		if (grounded) curNbJump = 0;
 		
-		return grounded || curNbJump < MAX_JUMP;
+		return grounded || curNbJump < charStats.MAX_JUMPS;
 	}
 	
 	private function Jump():void 
 	{
 		curNbJump++;
-		velocity.y = -JUMP_SPEED;
+		velocity.y = -charStats.JUMP_SPEED;
 		play("Jump");
 	}
 }

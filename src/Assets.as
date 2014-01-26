@@ -113,7 +113,7 @@ package
 			var turtle:SpriteHolder = new SpriteHolder(TURTLE, 68, 32);
 			turtle.GRAVITY = 420;
 			turtle.JUMP_SPEED = 340;
-			turtle.RUN_SPEED = 200;
+			turtle.RUN_SPEED = 10;
 			turtle.DRAG_SPEED = 200;
 			turtle.MAX_SPEED = 200;
 			turtle.MAX_JUMPS = 2;
