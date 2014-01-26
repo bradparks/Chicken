@@ -6,7 +6,14 @@ package
 
 	public class Player extends FlxSprite
 	{
+		// GUI STUFF
+		public const GUI_OFFSET_X = 0.04;
+		public const GUI_OFFSET_Y = 0.04;
+		public const GUI_SCALE_X = 0.90;
+		public const GUI_SCALE_Y = 0.90;
 		
+		
+		// CHARA CONTROL STUFF
 		public var RUN_SPEED:int = 400;
 		public var GRAVITY:int = 420;
 		public var JUMP_SPEED:int = 420;
@@ -21,6 +28,7 @@ package
 		public var insultincrement:Number = 0.8;
 		
 		public var bar:FlxBar;
+		public var gaugeSprite:FlxSprite
 		public var status:FlxText;
 		public var insult:FlxText;
 		public var curNbJump:int = 0;
@@ -75,16 +83,33 @@ package
 			
 			if (defaultkeys)
 			{
-				bar = new FlxBar(0, 0, FlxBar.FILL_LEFT_TO_RIGHT, 200, 20, this, "insultpower");
+				gaugeSprite = new FlxSprite(0, 0, Assets.GAUGE);
+				gaugeSprite.x = FlxG.width * GUI_OFFSET_X;
+				gaugeSprite.y = FlxG.height * GUI_OFFSET_Y;
+				gaugeSprite.scrollFactor.x = 0;
+				gaugeSprite.scrollFactor.y = 0;
 				
-				status = new FlxText(0, 30, 200, "You are a chicken");
+				bar = new FlxBar(gaugeSprite.x, gaugeSprite.y, FlxBar.FILL_LEFT_TO_RIGHT, gaugeSprite.width, gaugeSprite.height, this, "insultpower");
+				bar.createFilledBar(0xFFAAAAAA, 0xFFFFAAAA);
+				status = new FlxText(gaugeSprite.x, gaugeSprite.y + gaugeSprite.height, 200, "You are a chicken");
+				status.alignment = "center";
 			}
 			
 			else
 			{
-				bar = new FlxBar(FlxG.width - 200, 0, FlxBar.FILL_LEFT_TO_RIGHT, 200, 20, this, "insultpower");
 				
 				status = new FlxText(FlxG.width - 200, 30, 200, "You are a turtle");
+				gaugeSprite = new FlxSprite(0, 0, Assets.GAUGE);
+				gaugeSprite.x = FlxG.width - gaugeSprite.width - FlxG.width * GUI_OFFSET_X;
+				gaugeSprite.y = FlxG.height * GUI_OFFSET_Y;
+				gaugeSprite.scrollFactor.x = 0;
+				gaugeSprite.scrollFactor.y = 0;
+				
+				
+				bar = new FlxBar(gaugeSprite.x, gaugeSprite.y, FlxBar.FILL_LEFT_TO_RIGHT, gaugeSprite.width, gaugeSprite.height, this, "insultpower");
+				bar.createFilledBar(0xFFAAAAAA, 0xFFFFAAAA);
+				status = new FlxText(gaugeSprite.x, gaugeSprite.y + gaugeSprite.height, 200, "You are a chicken");
+				status.alignment = "center";
 			}
 			
 			status.size = 12;
@@ -95,6 +120,7 @@ package
 			
 			bar.scrollFactor.x = bar.scrollFactor.y = 0;
 			lvl.add(bar);
+			lvl.add(gaugeSprite);
 			
 			emitter = new FlxEmitter(_x, _y, 30);
 			lvl.add(emitter);

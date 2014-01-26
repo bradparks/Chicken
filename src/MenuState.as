@@ -47,6 +47,13 @@ package
 			add(helpbtn);
 			add(creditbtn);
 			add(disclaimer);
+			
+			FlxG.playMusic(Assets.CHIPTUNE_THEME);
+		}
+		
+		override public function destroy(): void
+		{
+			FlxG.music.stop();
 		}
 		
 		public function play():void

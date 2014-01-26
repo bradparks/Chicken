@@ -7,11 +7,33 @@ package
 	 */
 	public class Assets 
 	{
+		// MUSICS
 		[Embed(source="../assets/images/Splash.png")]
         public static const SPLASH:Class;
 		
 		[Embed(source="../assets/images/Train2.png")]
         public static const TRAIN:Class;
+		
+		[Embed(source="../assets/music/darkLoop.mp3")]
+        public static const DARK_LOOP:Class;
+		
+		[Embed(source="../assets/music/happyLoop.mp3")]
+        public static const HAPPY_LOOP:Class;
+		
+		[Embed(source="../assets/music/neutralLoop.mp3")]
+        public static const NEUTRAL_LOOP:Class;
+		
+		[Embed(source="../assets/music/theme_chiptune.mp3")]
+        public static const CHIPTUNE_THEME:Class;
+		
+		
+		// SFX
+		
+		// TODO
+		
+		// GFX
+		[Embed(source="../assets/images/progressbar_border.png")]
+		public static const GAUGE:Class;
 		
 		[Embed(source="../assets/images/Tuiles_32.png")]
         public static const FOREST:Class;
@@ -43,17 +65,22 @@ package
 		[Embed(source="../assets/images/elephant.png")]
         public static const ELEPHANT:Class;
 		
+		
+		// MISCS
+		//[Embed(source="../assets/lvls/mapCSV_Group1_Map1.csv", mimeType="application/octet-stream")]
+		//public static const LEVEL:Class;
+		
 		[Embed(source="../assets/insults.txt", mimeType="application/octet-stream")]
 		public static const INSULTS:Class;
 		
 		[Embed(source="../assets/badinsults.txt", mimeType="application/octet-stream")]
 		public static const BADINSULTS:Class;
 		
+		
+		
 		public static var CASUAL_INSULTS:Array = [];
 		public static var INSULTS_OF_DEATH:Array = [];
-		
 		public static var animals:Array = ["pig", "chicken", "turtle", "human", "elephant"];
-		
 		public static var animaldict:Dictionary = new Dictionary();
 		
 		//Level embedding
