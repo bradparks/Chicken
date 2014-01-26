@@ -1,5 +1,6 @@
 package
 {
+	import flash.geom.Point;
 	import org.flixel.*;
 	import org.flixel.plugin.photonstorm.FlxBar;
 	import org.flixel.plugin.photonstorm.FlxMath;
@@ -7,22 +8,25 @@ package
 	public class Player extends FlxSprite
 	{
 		// GUI STUFF
-		public const GUI_OFFSET_X = 0.04;
-		public const GUI_OFFSET_Y = 0.04;
-		public const GUI_SCALE_X = 0.90;
-		public const GUI_SCALE_Y = 0.90;
+		public const GUI_OFFSET_X : Number = 0.04;
+		public const GUI_OFFSET_Y : Number = 0.04;
+		public const GUI_SCALE_X : Number = 0.90;
+		public const GUI_SCALE_Y : Number = 0.90;
 		
 		
 		// CHARA CONTROL STUFF
 		public var defaultkeys:Boolean;
 		public var charStats : SpriteHolder;
+		public var walkSound : FlxSound = null;
 		
 		public var enemy:Player;
 		public var insultpower:Number = 100.0;
 		public var insultincrement:Number = 0.8;
+		public var lastKnownGrndPose : FlxPoint;
 		
 		public var bar:FlxBar;
-		public var gaugeSprite:FlxSprite
+		public var gaugeSprite:FlxSprite;
+		public var animalIcon:FlxSprite;
 		public var status:FlxText;
 		public var insult:FlxText;
 		public var curNbJump:int = 0;
@@ -74,6 +78,7 @@ package
 			insult.size = 11;
 			lvl.add(insult);
 			
+			// GUI
 			if (defaultkeys)
 			{
 				gaugeSprite = new FlxSprite(0, 0, Assets.GAUGE);
@@ -98,7 +103,6 @@ package
 				gaugeSprite.scrollFactor.x = 0;
 				gaugeSprite.scrollFactor.y = 0;
 				
-				
 				bar = new FlxBar(gaugeSprite.x, gaugeSprite.y, FlxBar.FILL_LEFT_TO_RIGHT, gaugeSprite.width, gaugeSprite.height, this, "insultpower");
 				bar.createFilledBar(0xFFAAAAAA, 0xFFFFAAAA);
 				status = new FlxText(gaugeSprite.x, gaugeSprite.y + gaugeSprite.height, 200, "You are a chicken");
@@ -114,6 +118,7 @@ package
 			bar.scrollFactor.x = bar.scrollFactor.y = 0;
 			lvl.add(bar);
 			lvl.add(gaugeSprite);
+			lvl.add(animalIcon);
 			
 			emitter = new FlxEmitter(_x, _y, 30);
 			lvl.add(emitter);
@@ -151,7 +156,6 @@ package
 				else if(FlxG.keys.L)
 				{
 					facing = RIGHT;
-					insultpower += insultincrement;
 					acceleration.x += charStats.DRAG_SPEED;
 				}
 				if(FlxG.keys.justPressed("I"))
@@ -196,6 +200,8 @@ package
 					//FlxG.play(SndJump);
 				}
 			}
+			
+			insultpower += insultincrement;
 			//ANIMATION
 			//if(velocity.y != 0)
 			//{
@@ -207,120 +213,147 @@ package
 			{
 					play("Idle");
 			}
-			
 			else
 			{
-					if (!velocity.y) play("Walk");
-			}
-			//else
-			//{
-				//if(_aim == UP) play("run_up");
-				//else play("run");
-			//}
-		//}
-	}
-	
-	public function morphEnemy():void
-	{
-		//Huge insult
-		if (insultpower > 98.0)
-		{
-			var found:Boolean = false;
-			
-			while (!found)
-			{
-				var ins:String = Assets.INSULTS_OF_DEATH[FlxMath.rand(0, Assets.INSULTS_OF_DEATH.length - 1)];
-				if (ins.search(enemy.currentanimal) == -1) found = true;
-			}
-			
-			insult.text = ins;
-			insult.color = 0xffff0000;
-			
-			for each (var ani:String in Assets.animals)
-			{
-				//trace(ani, ins);
-				if (ins.search(ani) != -1)
+				if (!velocity.y)
 				{
-					enemy.status.text = "You are a " + ani;
-					//var tempy:int = y;
-					var tempheight:int = enemy.height;
-					//trace(ani, ins);
-					enemy.currentanimal = ani;
-					charStats = Assets.animaldict[ani] as SpriteHolder;
-					enemy.loadGraphic(charStats.anim, true, true, charStats.fwidth, charStats.fheight, true);
-					enemy.width = charStats.fwidth;
-					enemy.height = charStats.fheight;
-					
-					//enemy.y -= enemy.height - tempheight;
-					
-					switch(ani)
-					{
-						case "human":
-							enemy.addAnimation("Idle", [5, 6], 2, true);
-							enemy.addAnimation("Walk", [0, 1, 2, 3, 4, ], 6, true);
-							enemy.addAnimation("Jump", [0, 1, 2, 3, 4, ], 2, false);
-							break;
-						
-						case "elephant":
-							enemy.addAnimation("Idle", [3, 4], 2, true);
-							enemy.addAnimation("Walk", [0, 1, 2], 6, true);
-							enemy.addAnimation("Jump", [6, 7], 2, false);
-							break;
-							
-						default:
-							enemy.addAnimation("Idle", [3, 4, 5], 2, true);
-							enemy.addAnimation("Walk", [0, 1, 2], charStats.walkfps, true);
-							enemy.addAnimation("Jump", [6, 7, 8], 2, false);
-							break;
-					}
-					
-					//enemy.y -= enemy.height - tempheight;
-					enemy.velocity.y -= 100;
+					play("Walk");
+					if ( walkSound == null )
+						walkSound = FlxG.play(charStats.STEP_SOUND, Assets.SFX_LEVEL, true, false);
+					else 
+						walkSound.play(true);
+				}
+				
+				if (!velocity.x)
+				{
+					if ( walkSound != null )
+						walkSound.stop();
 				}
 			}
 			
-			for(var i:int = 0; i < 30; i++)
+			if ( isTouching(FLOOR) )
 			{
-				var particle:FlxParticle = new FlxParticle();
-				particle.makeGraphic(3, 3, 0xffFF1C1C);
-				particle.exists = false;
-				//particle.lifespan = 1.6;
-				enemy.emitter.add(particle);
+				lastKnownGrndPose = new FlxPoint(x, y);
 			}
-			 
-			enemy.emitter.start(true, 1.6);
-			
-			FlxG.shake(0.01);
-			FlxG.flash(0xffffffff);
-			//insultpower = 0.0;
-			//enemy.charStats.JUMP_SPEED = FlxMath.randFloat(0.5, 2) * INIT_charStats.JUMP_SPEED;
-			//enemy.charStats.GRAVITY = FlxMath.randFloat(0.5, 2) * INIT_charStats.GRAVITY;
-			//enemy.charStats.RUN_SPEED = FlxMath.randFloat(0.5, 2) * INIT_SPEED;
-			//enemy.charStats.DRAG_SPEED = FlxMath.randFloat(0.5, 2) * INIT_charStats.DRAG_SPEED;
 		}
 		
-		//Casual insults
-		else
+		public function morphEnemy():void
 		{
-			var ins:String = Assets.CASUAL_INSULTS[FlxMath.rand(0, Assets.CASUAL_INSULTS.length - 1)];
-			insult.text = ins;
-			insult.color = 0xff000000;
+			//Huge insult
+			if (insultpower > 98.0)
+			{
+				var found:Boolean = false;
+				
+				while (!found)
+				{
+					var ins:String = Assets.INSULTS_OF_DEATH[FlxMath.rand(0, Assets.INSULTS_OF_DEATH.length - 1)];
+					if (ins.search(enemy.currentanimal) == -1) found = true;
+				}
+				
+				insult.text = ins;
+				insult.color = 0xffff0000;
+				
+				for each (var ani:String in Assets.animals)
+				{
+					//trace(ani, ins);
+					if (ins.search(ani) != -1)
+					{
+						enemy.status.text = "You are a " + ani;
+						//var tempy:int = y;
+						var tempheight:int = enemy.height;
+						//trace(ani, ins);
+						enemy.currentanimal = ani;
+						charStats = Assets.animaldict[ani] as SpriteHolder;
+						enemy.loadGraphic(charStats.anim, true, true, charStats.fwidth, charStats.fheight, true);
+						enemy.width = charStats.fwidth;
+						enemy.height = charStats.fheight;
+						MoveToFloor(enemy);
+						
+						//enemy.y -= enemy.height - tempheight;
+						
+						switch(ani)
+						{
+							case "human":
+								enemy.addAnimation("Idle", [5, 6], 2, true);
+								enemy.addAnimation("Walk", [0, 1, 2, 3, 4, ], 6, true);
+								enemy.addAnimation("Jump", [0, 1, 2, 3, 4, ], 2, false);
+								break;
+							
+							case "elephant":
+								enemy.addAnimation("Idle", [3, 4], 2, true);
+								enemy.addAnimation("Walk", [0, 1, 2], 6, true);
+								enemy.addAnimation("Jump", [6, 7], 2, false);
+								break;
+								
+							default:
+								enemy.addAnimation("Idle", [3, 4, 5], 2, true);
+								enemy.addAnimation("Walk", [0, 1, 2], charStats.walkfps, true);
+								enemy.addAnimation("Jump", [6, 7, 8], 2, false);
+								break;
+						}
+						
+						//enemy.y -= enemy.height - tempheight;
+						enemy.velocity.y -= 100;
+					}
+				}
+				
+				for(var i:int = 0; i < 30; i++)
+				{
+					var particle:FlxParticle = new FlxParticle();
+					particle.makeGraphic(3, 3, 0xffFF1C1C);
+					particle.exists = false;
+					//particle.lifespan = 1.6;
+					enemy.emitter.add(particle);
+				}
+				 
+				enemy.emitter.start(true, 1.6);
+				
+				FlxG.shake(0.01);
+				FlxG.flash(0xffffffff);
+				insultpower = 0.0;
+				//enemy.charStats.JUMP_SPEED = FlxMath.randFloat(0.5, 2) * INIT_charStats.JUMP_SPEED;
+				//enemy.charStats.GRAVITY = FlxMath.randFloat(0.5, 2) * INIT_charStats.GRAVITY;
+				//enemy.charStats.RUN_SPEED = FlxMath.randFloat(0.5, 2) * INIT_SPEED;
+				//enemy.charStats.DRAG_SPEED = FlxMath.randFloat(0.5, 2) * INIT_charStats.DRAG_SPEED;
+				
+				FlxG.play(charStats.SPAWN_SOUND, Assets.SFX_LEVEL);
+			}
+			
+			//Casual insults
+			else
+			{
+				var ins:String = Assets.CASUAL_INSULTS[FlxMath.rand(0, Assets.CASUAL_INSULTS.length - 1)];
+				insult.text = ins;
+				insult.color = 0xff000000;
+			}
+		}
+		
+		private function CanJump():Boolean
+		{
+			var grounded : Boolean = isTouching(FlxObject.FLOOR);
+			if (grounded) curNbJump = 0;
+			
+			return grounded || curNbJump < charStats.MAX_JUMPS;
+		}
+		
+		private function Jump():void 
+		{
+			curNbJump++;
+			velocity.y = -charStats.JUMP_SPEED;
+			play("Jump");
+			FlxG.play(charStats.JUMP_SOUND, Assets.SFX_LEVEL);
+		}
+		
+		private function MoveToFloor(p:Player):void
+		{
+			var tileMap : FlxTilemap = lvl.map;
+			
+			var res:FlxPoint = new FlxPoint(0, 0);
+			if ( ! tileMap.ray( new FlxPoint(p.x, p.y), new FlxPoint(p.x, p.y + 500), res) )
+			{
+				p.y = res.y - p.height*1.30;
+			}
+			else trace ("FUUUUUUUUUUU-");
 		}
 	}
-	
-	private function CanJump():Boolean
-	{
-		var grounded : Boolean = isTouching(FlxObject.FLOOR);
-		if (grounded) curNbJump = 0;
-		
-		return grounded || curNbJump < charStats.MAX_JUMPS;
-	}
-	
-	private function Jump():void 
-	{
-		curNbJump++;
-		velocity.y = -charStats.JUMP_SPEED;
-		play("Jump");
-	}
-}
 }

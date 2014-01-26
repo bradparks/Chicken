@@ -20,6 +20,10 @@ package
 		public var DRAG_SPEED:int = 200;
 		public var MAX_SPEED:int = 400;
 		
+		public var JUMP_SOUND:Class;
+		public var SPAWN_SOUND:Class;
+		public var STEP_SOUND:Class;
+		
 		//public function SpriteHolder(Left:Anim, Right:Anim, Fwidth:int, Fheight:int)
 		public function SpriteHolder(Sprite:Class, Fwidth:int, Fheight:int) 
 		{

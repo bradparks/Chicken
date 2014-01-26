@@ -1,5 +1,7 @@
 package  
 {
+	import flash.display.Sprite;
+	import flash.geom.Point;
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxObject;
 	import org.flixel.FlxPoint;
@@ -19,7 +21,7 @@ package
 		public var lvlindex:uint;
 		
 		public const RESPAWN_DIST : int = 100;
-		public const LERP_RATE : Number = 0.1;
+		public const LERP_RATE : Number = 0.5;
 		
 		public var map:FlxTilemap;
 		public var p1:Player;
@@ -164,30 +166,53 @@ package
 			{
 				dummy.x = Utils.Lerp(dummy.x, p1.x, LERP_RATE);
 				dummy.y = Utils.Lerp(dummy.y, p1.y, LERP_RATE);
-				dummy.y = Utils.Lerp(dummy.y, p1.y, 0.1);
 			}
 			else
 			{
 				dummy.x = Utils.Lerp(dummy.x, p2.x, LERP_RATE);
 				dummy.y = Utils.Lerp(dummy.y, p1.y, LERP_RATE);
-				dummy.y = Utils.Lerp(dummy.y, p2.x, 0.1);
 			}
 		}
 		
 		private function RespawnIfOutOfScreen() : void
 		{
+			var bounds : FlxRect = FlxG.camera.bounds;
+			var screen : FlxSprite = FlxG.camera.screen;
+			
 			if ( ! p1.onScreen() )
 			{
-				Respawn(p1, p2);
+				// fall in a pit
+				if ( p1.y > bounds.bottom && p1.lastKnownGrndPose != null )
+				{
+					p1.x = p1.lastKnownGrndPose.x-p1.width;
+					p1.y = p1.lastKnownGrndPose.y;
+				}
+				
+				// left behind
+				if ( p1.x < screen.x - screen.width * 0.5 )
+				{
+					Respawn(p1, p2);
+				}
 			}
 			else if ( ! p2.onScreen() )
 			{
-				Respawn(p2, p1);
+				// fall in a pit
+				if ( p2.y > bounds.bottom && p2.lastKnownGrndPose != null )
+				{
+					p2.x = p2.lastKnownGrndPose.x-p2.width;
+					p2.y = p2.lastKnownGrndPose.y;
+				}
+				
+				// left behind
+				if ( p2.x < screen.x - screen.width * 0.5 )
+				{
+					Respawn(p2, p1);
+				}
 			}
 		}
 		
 		private function Respawn( pToRespawn:Player, target:Player) : void 
-		{
+		{	
 			var spawnX : int = target.x + RESPAWN_DIST;
 			var tileSize : int = map.width / map.widthInTiles;
 			var column : int = (spawnX / map.width) * map.widthInTiles;
@@ -204,6 +229,8 @@ package
 			
 			pToRespawn.x = spawnX;
 			pToRespawn.y = spawnY;
+			
+			FlxG.play(pToRespawn.charStats.SPAWN_SOUND, Assets.SFX_LEVEL);
 		}
 		
 		private function InterpolateSound() : void

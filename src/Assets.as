@@ -7,6 +7,9 @@ package
 	 */
 	public class Assets 
 	{
+		// SOUND STUFF
+		public static const SFX_LEVEL : Number = 2;
+		
 		// MUSICS
 		[Embed(source="../assets/images/Splash.png")]
         public static const SPLASH:Class;
@@ -28,10 +31,40 @@ package
 		
 		
 		// SFX
+		[Embed(source="../assets/sounds/SFX_jump.mp3")]
+		public static const SFX_JUMP:Class;
 		
-		// TODO
+		[Embed(source="../assets/sounds/SFX_spawn_chicken.mp3")]
+		public static const SFX_SPAWN_CHICKEN:Class;
+		
+		[Embed(source="../assets/sounds/SFX_spawn_elephant.mp3")]
+		public static const SFX_SPAWN_ELEPHANT:Class;
+		
+		[Embed(source="../assets/sounds/SFX_spawn_man.mp3")]
+		public static const SFX_SPAWN_MAN:Class;
+		
+		[Embed(source="../assets/sounds/SFX_spawn_pig.mp3")]
+		public static const SFX_SPAWN_PIG:Class;
+		
+		[Embed(source="../assets/sounds/SFX_spawn_turtle.mp3")]
+		public static const SFX_SPAWN_TURTLE:Class;
+		
+		[Embed(source="../assets/sounds/SFX_step_chicken.mp3")]
+		public static const SFX_STEP_CHICKEN:Class;
+		
+		[Embed(source="../assets/sounds/SFX_step_elephant.mp3")]
+		public static const SFX_STEP_ELEPHANT:Class;
+		
+		[Embed(source="../assets/sounds/SFX_step_man_or_pig.mp3")]
+		public static const SFX_STEP_MAN_PIG:Class;
+		
+		[Embed(source="../assets/sounds/SFX_step_turtle.mp3")]
+		public static const SFX_STEP_TURTLE:Class;
 		
 		// GFX
+		[Embed(source="../assets/images/icon.png")]
+		public static const ICON:Class;
+		
 		[Embed(source="../assets/images/progressbar_border.png")]
 		public static const GAUGE:Class;
 		
@@ -109,14 +142,20 @@ package
 			pig.RUN_SPEED = 300;
 			pig.DRAG_SPEED = 300;
 			pig.MAX_SPEED = 300;
+			pig.JUMP_SOUND = Assets.SFX_JUMP;
+			pig.SPAWN_SOUND = Assets.SFX_SPAWN_PIG;
+			pig.STEP_SOUND = Assets.SFX_STEP_MAN_PIG;
 			
 			var turtle:SpriteHolder = new SpriteHolder(TURTLE, 68, 32);
 			turtle.GRAVITY = 420;
 			turtle.JUMP_SPEED = 340;
-			turtle.RUN_SPEED = 10;
+			turtle.RUN_SPEED = 200;
 			turtle.DRAG_SPEED = 200;
 			turtle.MAX_SPEED = 200;
 			turtle.MAX_JUMPS = 2;
+			turtle.JUMP_SOUND = Assets.SFX_JUMP;
+			turtle.SPAWN_SOUND = Assets.SFX_SPAWN_TURTLE;
+			turtle.STEP_SOUND = Assets.SFX_STEP_TURTLE;
 			
 			var human:SpriteHolder = new SpriteHolder(HUMAN, 38, 100);
 			human.GRAVITY = 420;
@@ -124,6 +163,9 @@ package
 			human.RUN_SPEED = 230;
 			human.DRAG_SPEED = 500;
 			human.MAX_SPEED = 230;
+			human.JUMP_SOUND = Assets.SFX_JUMP;
+			human.SPAWN_SOUND = Assets.SFX_SPAWN_MAN;
+			human.STEP_SOUND = Assets.SFX_STEP_MAN_PIG;
 			
 			var chicken:SpriteHolder = new SpriteHolder(CHICKEN, 48, 46);
 			chicken.GRAVITY = 420;
@@ -132,6 +174,9 @@ package
 			chicken.DRAG_SPEED = 400;
 			chicken.MAX_SPEED = 400;
 			chicken.walkfps = 18;
+			chicken.JUMP_SOUND = Assets.SFX_JUMP;
+			chicken.SPAWN_SOUND = Assets.SFX_SPAWN_CHICKEN;
+			chicken.STEP_SOUND = Assets.SFX_STEP_CHICKEN;
 			
 			var elephant:SpriteHolder = new SpriteHolder(ELEPHANT, 158, 105);
 			elephant.GRAVITY = 500;
@@ -140,6 +185,9 @@ package
 			elephant.DRAG_SPEED = 300;
 			elephant.MAX_SPEED = 300;
 			//elephant.walkfps = 18;
+			elephant.JUMP_SOUND = Assets.SFX_JUMP;
+			elephant.SPAWN_SOUND = Assets.SFX_SPAWN_ELEPHANT;
+			elephant.STEP_SOUND = Assets.SFX_STEP_ELEPHANT;
 			
 			animaldict["pig"] = pig;
 			animaldict["turtle"] = turtle;
