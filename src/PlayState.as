@@ -177,7 +177,6 @@ package
 		private function RespawnIfOutOfScreen() : void
 		{
 			var bounds : FlxRect = FlxG.camera.bounds;
-			var screen : FlxSprite = FlxG.camera.screen;
 			
 			if ( ! p1.onScreen() )
 			{
@@ -189,7 +188,7 @@ package
 				}
 				
 				// left behind
-				if ( p1.x < screen.x - screen.width * 0.5 )
+				if ( p1.getScreenXY().x < 0 )
 				{
 					Respawn(p1, p2);
 				}
@@ -204,7 +203,7 @@ package
 				}
 				
 				// left behind
-				if ( p2.x < screen.x - screen.width * 0.5 )
+				if ( p2.getScreenXY().x < 0 )
 				{
 					Respawn(p2, p1);
 				}

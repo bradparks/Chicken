@@ -65,6 +65,18 @@ package
 		[Embed(source="../assets/images/icon.png")]
 		public static const ICON:Class;
 		
+		[Embed(source="../assets/images/icon_chicken.png")]
+		public static const ICON_CHICKEN:Class;
+		
+		[Embed(source="../assets/images/icon_elephant.png")]
+		public static const ICON_ELEPHANT:Class;
+		
+		[Embed(source="../assets/images/icon_pig.png")]
+		public static const ICON_PIG:Class;
+		
+		[Embed(source="../assets/images/icon_turtle.png")]
+		public static const ICON_TURTLE:Class;
+		
 		[Embed(source="../assets/images/progressbar_border.png")]
 		public static const GAUGE:Class;
 		
@@ -113,7 +125,7 @@ package
 		
 		public static var CASUAL_INSULTS:Array = [];
 		public static var INSULTS_OF_DEATH:Array = [];
-		public static var animals:Array = ["pig", "chicken", "turtle", "human", "elephant"];
+		public static var animals:Array = ["pig", "chicken", "turtle", "elephant"];
 		public static var animaldict:Dictionary = new Dictionary();
 		
 		//Level embedding
