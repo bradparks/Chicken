@@ -26,6 +26,9 @@ package
 		public var skybox:FlxSprite;
 		
 		public var mountaingroup:FlxGroup = new FlxGroup();
+		public var backtreesgroup:FlxGroup = new FlxGroup();
+		public var fronttreesgroup:FlxGroup = new FlxGroup();
+		
 		public var mountain1:FlxSprite;
 		public var mountain2:FlxSprite;
 		public var backtrees:FlxSprite;
@@ -52,7 +55,7 @@ package
 			skybox.scrollFactor.x = skybox.scrollFactor.y = 0;
 			add(skybox);
 			
-			add(mountaingroup);
+			//add(mountaingroup);
 			mountain1 = new FlxSprite(0, FlxG.height - 402, Assets.MOUNTAINS);
 			mountain1.scrollFactor.x = 0.2;
 			mountain1.scrollFactor.y = 0;
@@ -66,6 +69,10 @@ package
 			fronttrees = new FlxSprite(0, FlxG.height - 305, Assets.TREES_FRONT);
 			fronttrees.scrollFactor.x = 0.6;
 			fronttrees.scrollFactor.y = 0;
+			add(fronttrees);
+			
+			add(mountaingroup);
+			add(backtrees);
 			add(fronttrees);
 			
 			FlxG.flash();
@@ -97,6 +104,8 @@ package
 			FlxG.worldBounds = new FlxRect(map.x, map.y, map.width, map.height);
 			FlxG.camera.setBounds(0, 0, map.width, map.height);
 			PickCamera();
+			
+			for (var x = (FlxG.worldBounds.width / int(2520 * 0.2)) + 1; x++)
 		}
 		
 		/**
