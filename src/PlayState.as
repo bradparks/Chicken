@@ -21,7 +21,7 @@ package
 		public var lvlindex:uint;
 		
 		public const RESPAWN_DIST : int = 100;
-		public const LERP_RATE : Number = 0.5;
+		public const LERP_RATE : Number = 0.1;
 		
 		public var map:FlxTilemap;
 		public var p1:Player;
@@ -197,14 +197,21 @@ package
 				// fall in a pit
 				if ( p1.y > bounds.bottom && p1.lastKnownGrndPose != null )
 				{
-					p1.x = p1.lastKnownGrndPose.x-p1.width;
-					p1.y = p1.lastKnownGrndPose.y;
+					p1.x = p2.x = p1.lastKnownGrndPose.x-p1.width;
+					p1.y = p2.y = p1.lastKnownGrndPose.y;
 				}
 				
 				// left behind
 				if ( p1.getScreenXY().x < 0 )
 				{
-					Respawn(p1, p2);
+					//Respawn(p1, p2);
+					p2.x = p1.x;
+					p2.y = p1.y;
+					
+					p2.y -= p2.height - p1.height;
+					
+					//p1.x = p2.x = p1.lastKnownGrndPose.x-p1.width;
+					//p1.y = p2.y = p1.lastKnownGrndPose.y;
 				}
 			}
 			else if ( ! p2.onScreen() )
@@ -212,14 +219,24 @@ package
 				// fall in a pit
 				if ( p2.y > bounds.bottom && p2.lastKnownGrndPose != null )
 				{
-					p2.x = p2.lastKnownGrndPose.x-p2.width;
-					p2.y = p2.lastKnownGrndPose.y;
+					//p2.x = p2.lastKnownGrndPose.x-p2.width;
+					//p2.y = p2.lastKnownGrndPose.y;
+					
+					p1.x = p2.x = p2.lastKnownGrndPose.x-p1.width;
+					p1.y = p2.y = p2.lastKnownGrndPose.y;
 				}
 				
 				// left behind
 				if ( p2.getScreenXY().x < 0 )
 				{
-					Respawn(p2, p1);
+					//Respawn(p2, p1);
+					p1.x = p2.x;
+					p1.y = p2.y;
+					
+					p1.y -= p1.height - p2.height;
+					
+					//p1.x = p2.x = p2.lastKnownGrndPose.x-p1.width;
+					//p1.y = p2.y = p2.lastKnownGrndPose.y;
 				}
 			}
 		}

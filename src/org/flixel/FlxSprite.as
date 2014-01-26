@@ -260,6 +260,8 @@ package org.flixel
 		 */
 		public function loadGraphic(Graphic:Class,Animated:Boolean=false,Reverse:Boolean=false,Width:uint=0,Height:uint=0,Unique:Boolean=false):FlxSprite
 		{
+			//resetHelpers();
+			//_animations = [];
 			_bakedRotation = 0;
 			_pixels = FlxG.addBitmap(Graphic,Reverse,Unique);
 			if(Reverse)
@@ -629,6 +631,14 @@ package org.flixel
 		 */
 		public function addAnimation(Name:String, Frames:Array, FrameRate:Number=0, Looped:Boolean=true):void
 		{
+			//for (var x:int = 0; x < _animations.length; x++)
+			//{
+				//if (_animations[x].name == Name)
+				//{
+					//_animations.splice(x, 1);
+				//}
+			//}
+			
 			_animations.push(new FlxAnim(Name,Frames,FrameRate,Looped));
 		}
 		

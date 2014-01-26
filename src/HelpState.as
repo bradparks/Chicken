@@ -23,31 +23,34 @@ package
 			FlxG.bgColor = 0xff80CAFF;
 			FlxG.mouse.show();
 			
-			splash = new FlxSprite(0, 0, Assets.SPLASH);
+			splash = new FlxSprite(0, 0, Assets.HELPPAGE);
 			splash.scrollFactor.x = splash.scrollFactor.y = 0;
 			add(splash);
 			
-			backbtn = new FlxButton(10, 10, "Back to menu", goback);
+			backbtn = new FlxButton(FlxG.width - 90, 10, "Back to menu", goback);
 			//backbtn.exists = false;
-			text = new FlxText(10, 45, FlxG.width - 10,
+			text = new FlxText(10, 80, FlxG.width - 10,
 			"Player 1 controls: " +
-			"\nMove left: left arrow" +
-			"\nMove right: right arrow" +
+			"\nMove left: J" +
+			"\nMove right: L" +
 			"\nJump: space bar" +
-			"\nInsult rival: down arrow" +
+			"\nInsult rival: I" +
+			"\nChoose rival's animal: U" +
 			"\n\nPlayer 2 controls: " +
 			"\nMove left: A" +
 			"\nMove right: D" +
 			"\nJump: space bar" +
 			"\nInsult rival: W" +
-			"\n\nWhen your insult bar is full, insult your adversary to turn him into a random animal (possibly making things bad for him). The point is to reach the right end of the level as fast as possible. Your insult bar recharges as you move to the right. You can also insult your opponent even when your bar isn't full, but that doesn't have any effect other than psychological damage."
+			"\nChoose rival's animal: E" +
+			"\n\nReturn to level select: mouse left click" +
+			"\n\nWhen your insult bar is full, insult your adversary to turn him into an animal (possibly making things bad for him). The point is to reach the right end of the level as fast as possible. Your insult bar recharges as you move to the right. You can also insult your opponent even when your bar isn't full, but that doesn't have any effect other than psychological damage."
 			);
 			text.color = 0xff000000;
 			text.shadow = 0xffffffff;
 			text.size = 12;
 			//credittext.exists = false;
 			
-			add(text);
+			//add(text);
 			add(backbtn);
 		}
 		

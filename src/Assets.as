@@ -14,6 +14,12 @@ package
 		[Embed(source="../assets/images/Splash.png")]
         public static const SPLASH:Class;
 		
+		[Embed(source="../assets/images/Losepage.png")]
+        public static const LOSEPAGE:Class;
+		
+		[Embed(source="../assets/images/help.png")]
+        public static const HELPPAGE:Class;
+		
 		[Embed(source="../assets/images/Train2.png")]
         public static const TRAIN:Class;
 		
@@ -101,13 +107,13 @@ package
 		[Embed(source="../assets/images/pig.png")]
         public static const PIG:Class;
 		
-		[Embed(source="../assets/images/human3.png")]
+		[Embed(source="../assets/images/human_fixed.png")]
         public static const HUMAN:Class;
 		
 		[Embed(source="../assets/images/ChickenSprite.png")]
         public static const CHICKEN:Class;
 		
-		[Embed(source="../assets/images/elephant.png")]
+		[Embed(source="../assets/images/elephant2.png")]
         public static const ELEPHANT:Class;
 		
 		
@@ -185,58 +191,47 @@ package
 		
 		public static function loadAnimals():void
 		{
-			var pig:SpriteHolder = new SpriteHolder(PIG, 64, 44);
+			var pig:SpriteHolder = new SpriteHolder(PIG, 64, 44);   ////2     can't jump properly
 			pig.GRAVITY = 275;
-			pig.JUMP_SPEED = 250;
-			pig.RUN_SPEED = 300;
-			pig.DRAG_SPEED = 300;
-			pig.MAX_SPEED = 300;
-			pig.JUMP_SOUND = Assets.SFX_JUMP;
-			pig.SPAWN_SOUND = Assets.SFX_SPAWN_PIG;
-			pig.STEP_SOUND = Assets.SFX_STEP_MAN_PIG;
+			pig.JUMP_SPEED = 170;
+			pig.RUN_SPEED = 150;
+			pig.DRAG_SPEED = 200;
+			pig.MAX_SPEED = 200;
 			
-			var turtle:SpriteHolder = new SpriteHolder(TURTLE, 68, 32);
-			turtle.GRAVITY = 420;
-			turtle.JUMP_SPEED = 340;
-			turtle.RUN_SPEED = 200;
-			turtle.DRAG_SPEED = 200;
-			turtle.MAX_SPEED = 200;
+			var turtle:SpriteHolder = new SpriteHolder(TURTLE, 68, 32); ///3  really slow, can't jump as well
+			turtle.GRAVITY = 500;
+			turtle.JUMP_SPEED = 140;
+			turtle.RUN_SPEED = 100;
+			turtle.DRAG_SPEED = 50;
+			turtle.MAX_SPEED = 40;
 			turtle.MAX_JUMPS = 2;
-			turtle.JUMP_SOUND = Assets.SFX_JUMP;
-			turtle.SPAWN_SOUND = Assets.SFX_SPAWN_TURTLE;
-			turtle.STEP_SOUND = Assets.SFX_STEP_TURTLE;
 			
-			var human:SpriteHolder = new SpriteHolder(HUMAN, 38, 100);
+			var human:SpriteHolder = new SpriteHolder(HUMAN, 37, 100);
 			human.GRAVITY = 420;
-			human.JUMP_SPEED = 200;
-			human.RUN_SPEED = 230;
-			human.DRAG_SPEED = 500;
+			human.JUMP_SPEED = 800;
+			human.JUMP_SPEED = 800;
+			human.RUN_SPEED = 120;
+			human.DRAG_SPEED = 100;
 			human.MAX_SPEED = 230;
-			human.JUMP_SOUND = Assets.SFX_JUMP;
-			human.SPAWN_SOUND = Assets.SFX_SPAWN_MAN;
-			human.STEP_SOUND = Assets.SFX_STEP_MAN_PIG;
 			
-			var chicken:SpriteHolder = new SpriteHolder(CHICKEN, 48, 46);
+			var chicken:SpriteHolder = new SpriteHolder(CHICKEN, 48, 46); ////1  can fly, space button mash
 			chicken.GRAVITY = 420;
-			chicken.JUMP_SPEED = 200;
-			chicken.RUN_SPEED = 400;
-			chicken.DRAG_SPEED = 400;
+			chicken.JUMP_SPEED = 120;
+			chicken.RUN_SPEED = 200;
+			chicken.MAX_JUMPS = 8;
+			chicken.DRAG_SPEED = 200;
 			chicken.MAX_SPEED = 400;
 			chicken.walkfps = 18;
-			chicken.JUMP_SOUND = Assets.SFX_JUMP;
-			chicken.SPAWN_SOUND = Assets.SFX_SPAWN_CHICKEN;
-			chicken.STEP_SOUND = Assets.SFX_STEP_CHICKEN;
 			
-			var elephant:SpriteHolder = new SpriteHolder(ELEPHANT, 158, 105);
+			var elephant:SpriteHolder = new SpriteHolder(ELEPHANT, 158, 102);  // can fly, space button mash
 			elephant.GRAVITY = 500;
 			elephant.JUMP_SPEED = 200;
+			elephant.MAX_JUMPS = 20;
 			elephant.RUN_SPEED = 300;
 			elephant.DRAG_SPEED = 300;
 			elephant.MAX_SPEED = 300;
 			//elephant.walkfps = 18;
-			elephant.JUMP_SOUND = Assets.SFX_JUMP;
-			elephant.SPAWN_SOUND = Assets.SFX_SPAWN_ELEPHANT;
-			elephant.STEP_SOUND = Assets.SFX_STEP_ELEPHANT;
+			
 			
 			animaldict["pig"] = pig;
 			animaldict["turtle"] = turtle;

@@ -29,21 +29,21 @@ package
 			super.create();
 			FlxG.mouse.show();
 			
-			splash = new FlxSprite(0, 0, Assets.SPLASH);
+			splash = new FlxSprite(0, 0, Assets.LOSEPAGE);
 			splash.scrollFactor.x = splash.scrollFactor.y = 0;
 			add(splash);
 			
 			var winstring:String = "";
 			if (p1haswon) {
-				winstring = "Player 1 has won."
+				winstring = "Dear Player 1,"
 			}
 			
 			else
 			{
-				winstring = "Player 2 has won."
+				winstring = "Dear Player 2,"
 			}
 			
-			wintext = new FlxText(0, 100, FlxG.width, winstring);
+			wintext = new FlxText(0, 10, FlxG.width, winstring);
 			wintext.alignment = "center";
 			wintext.color = 0xff000000;
 			wintext.shadow = 0xffffffff;
@@ -51,7 +51,7 @@ package
 			
 			add(wintext);
 			
-			backbtn = new FlxButton(FlxG.width/2 - 80, 350, "Select LVL", goback);
+			backbtn = new FlxButton(FlxG.width/2 - 80, 350, "ChooseLVL", goback);
 			backbtn.scale.x = backbtn.scale.y = 2;
 			backbtn.label.size = 13;
 			backbtn.x += backbtn.frameWidth/2;

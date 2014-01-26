@@ -98,7 +98,7 @@ package
 				
 				bar = new FlxBar(gaugeSprite.x, gaugeSprite.y, FlxBar.FILL_LEFT_TO_RIGHT, gaugeSprite.width, gaugeSprite.height, this, "insultpower");
 				bar.createFilledBar(0xFFAAAAAA, 0xFFFFAAAA);
-				status = new FlxText(gaugeSprite.x, gaugeSprite.y + gaugeSprite.height, 200, "You are a turtle");
+				status = new FlxText(gaugeSprite.x, gaugeSprite.y + gaugeSprite.height, 200, "You are a " + currentanimal);
 				status.alignment = "center";
 				
 				
@@ -119,7 +119,7 @@ package
 			else
 			{
 				
-				status = new FlxText(FlxG.width - 200, 30, 200, "You are a turtle");
+				status = new FlxText(FlxG.width - 200, 30, 200, "You are a " + currentanimal);
 				gaugeSprite = new FlxSprite(0, 0, Assets.GAUGE);
 				gaugeSprite.x = FlxG.width - gaugeSprite.width - FlxG.width * GUI_OFFSET_X;
 				gaugeSprite.y = FlxG.height * GUI_OFFSET_Y;
@@ -128,7 +128,7 @@ package
 				
 				bar = new FlxBar(gaugeSprite.x, gaugeSprite.y, FlxBar.FILL_LEFT_TO_RIGHT, gaugeSprite.width, gaugeSprite.height, this, "insultpower");
 				bar.createFilledBar(0xFFAAAAAA, 0xFFFFAAAA);
-				status = new FlxText(gaugeSprite.x, gaugeSprite.y + gaugeSprite.height, 200, "You are a turtle");
+				status = new FlxText(gaugeSprite.x, gaugeSprite.y + gaugeSprite.height, 200, "You are a " + currentanimal);
 				status.alignment = "center";
 				
 				
@@ -141,19 +141,19 @@ package
 			
 			iconChicken.scrollFactor.x = 0;
 			iconChicken.scrollFactor.y = 0;
-			iconChicken.y = 40;
+			iconChicken.y = 0;
 			
 			iconPig.scrollFactor.x = 0;
 			iconPig.scrollFactor.y = 0;
-			iconPig.y = 40;
+			iconPig.y = 0;
 			
 			iconElephant.scrollFactor.x = 0;
 			iconElephant.scrollFactor.y = 0;
-			iconElephant.y = 40;
+			iconElephant.y = 0;
 			
 			iconTurtle.scrollFactor.x = 0;
 			iconTurtle.scrollFactor.y = 0;
-			iconTurtle.y = 40;
+			iconTurtle.y = 0;
 			
 			lvl.add(iconPig);
 			lvl.add(iconChicken);
@@ -180,6 +180,7 @@ package
 			emitter = new FlxEmitter(_x, _y, 30);
 			lvl.add(emitter);
 			
+			SetActiveSprite(currentanimal);
 			play("Idle");
 		}
 		
@@ -230,6 +231,10 @@ package
 				{
 					morphEnemy();
 				}
+				if(FlxG.keys.justPressed("O"))
+				{
+					setHuman();
+				}
 				if(FlxG.keys.justPressed("SPACE") && CanJump())
 				{
 					Jump();
@@ -256,6 +261,10 @@ package
 				if(FlxG.keys.justPressed("W"))
 				{
 					morphEnemy();
+				}
+				if(FlxG.keys.justPressed("Q"))
+				{
+					setHuman();
 				}
 				if(FlxG.keys.justPressed("SPACE") && CanJump())
 				{
@@ -299,10 +308,61 @@ package
 			}
 		}
 		
+		public function setHuman():void
+		{
+			var ani:String = "human";
+			status.text = "You are a " + ani;
+			//var tempy:int = y;
+			var tempheight:int = height;
+			//trace(ani, ins);
+			currentanimal = ani;
+			charStats = Assets.animaldict[ani] as SpriteHolder;
+			loadGraphic(charStats.anim, true, true, charStats.fwidth, charStats.fheight, true);
+			width = charStats.fwidth;
+			height = charStats.fheight;
+			MoveToFloor(this);
+			
+			//enemy.y -= enemy.height - tempheight;
+			
+			switch(ani)
+			{
+				case "human":
+					enemy.addAnimation("Idle", [5, 6], 2, true);
+					enemy.addAnimation("Walk", [0, 1, 3, 4,], charStats.walkfps, true);
+					enemy.addAnimation("Jump", [0, 1, 2, 3, 4,], 2, false);
+					break;
+			}
+			
+			//enemy.y -= enemy.height - tempheight;
+			velocity.y -= 100;
+			
+			for(var i:int = 0; i < 30; i++)
+			{
+				var particle:FlxParticle = new FlxParticle();
+				particle.makeGraphic(3, 3, 0xffFF1C1C);
+				particle.exists = false;
+				//particle.lifespan = 1.6;
+				emitter.add(particle);
+			}
+			 
+			emitter.start(true, 1.6);
+			
+			FlxG.shake(0.01);
+			FlxG.flash(0xffffffff);
+			insultpower = 0.0;
+			//enemy.charStats.JUMP_SPEED = FlxMath.randFloat(0.5, 2) * INIT_charStats.JUMP_SPEED;
+			//enemy.charStats.GRAVITY = FlxMath.randFloat(0.5, 2) * INIT_charStats.GRAVITY;
+			//enemy.charStats.RUN_SPEED = FlxMath.randFloat(0.5, 2) * INIT_SPEED;
+			//enemy.charStats.DRAG_SPEED = FlxMath.randFloat(0.5, 2) * INIT_charStats.DRAG_SPEED;
+			
+			FlxG.play(charStats.SPAWN_SOUND, Assets.SFX_LEVEL);
+		}
+		
 		public function morphEnemy():void
 		{
 			//Huge insult
 			if (insultpower > 98.0 && activeIcon != null && Assets.animals[chooseindex] != enemy.currentanimal)
+			//&& Assets.animals[chooseindex] != currentanimal)
 			{
 				var ani:String = Assets.animals[chooseindex];
 				enemy.status.text = "You are a " + ani;
@@ -310,10 +370,10 @@ package
 				var tempheight:int = enemy.height;
 				//trace(ani, ins);
 				enemy.currentanimal = ani;
-				charStats = Assets.animaldict[ani] as SpriteHolder;
-				enemy.loadGraphic(charStats.anim, true, true, charStats.fwidth, charStats.fheight, true);
-				enemy.width = charStats.fwidth;
-				enemy.height = charStats.fheight;
+				enemy.charStats = Assets.animaldict[ani] as SpriteHolder;
+				enemy.loadGraphic(enemy.charStats.anim, true, true, enemy.charStats.fwidth, enemy.charStats.fheight, true);
+				enemy.width = enemy.charStats.fwidth;
+				enemy.height = enemy.charStats.fheight;
 				MoveToFloor(enemy);
 				
 				//enemy.y -= enemy.height - tempheight;
@@ -321,9 +381,13 @@ package
 				switch(ani)
 				{
 					case "human":
-						enemy.addAnimation("Idle", [5, 6], 2, true);
-						enemy.addAnimation("Walk", [0, 1, 2, 3, 4, ], 6, true);
-						enemy.addAnimation("Jump", [0, 1, 2, 3, 4, ], 2, false);
+						//enemy.addAnimation("Idle", [3, 4, 5], 2, true);
+						//enemy.addAnimation("Walk", [0, 1, 2], charStats.walkfps, true);
+						//enemy.addAnimation("Jump", [6, 7, 8], 2, false);
+						//break;
+						enemy.addAnimation("Idle", [3, 4, 5], 2, true);
+						enemy.addAnimation("Walk", [0, 1, 2], charStats.walkfps, true);
+						enemy.addAnimation("Jump", [6, 7, 8], 2, false);
 						break;
 					
 					case "elephant":
@@ -356,6 +420,7 @@ package
 				FlxG.shake(0.01);
 				FlxG.flash(0xffffffff);
 				insultpower = 0.0;
+				insult.color = 0xffff0000;
 				//enemy.charStats.JUMP_SPEED = FlxMath.randFloat(0.5, 2) * INIT_charStats.JUMP_SPEED;
 				//enemy.charStats.GRAVITY = FlxMath.randFloat(0.5, 2) * INIT_charStats.GRAVITY;
 				//enemy.charStats.RUN_SPEED = FlxMath.randFloat(0.5, 2) * INIT_SPEED;
@@ -364,12 +429,17 @@ package
 				FlxG.play(charStats.SPAWN_SOUND, Assets.SFX_LEVEL);
 			}
 			
+			else
+			{
+				insult.color = 0xff000000;
+			}
+			
 			//Casual insults
 			if (currentanimal == enemy.currentanimal)
 			{
 				var ins:String = Assets.CASUAL_INSULTS[FlxMath.rand(0, Assets.CASUAL_INSULTS.length - 1)];
 				insult.text = ins;
-				insult.color = 0xff000000;
+				//insult.color = 0xff000000;
 			}
 			
 			else
@@ -397,7 +467,7 @@ package
 				
 				var ins:String = arr[FlxMath.rand(0, arr.length - 1)];
 				insult.text = ins;
-				insult.color = 0xff000000;
+				//insult.color = 0xff000000;
 			}
 		}
 		
