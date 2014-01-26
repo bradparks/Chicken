@@ -10,6 +10,18 @@ package
 		[Embed(source="../assets/images/Tuiles_32.png")]
         public static const FOREST:Class;
 		
+		[Embed(source="../assets/images/TuileCiel2.png")]
+		public static const SKYBOX:Class;
+		
+		[Embed(source="../assets/images/Mountains.png")]
+		public static const MOUNTAINS:Class;
+		
+		[Embed(source="../assets/images/TreeLineBack.png")]
+		public static const TREES_BACK:Class;
+		
+		[Embed(source="../assets/images/TreeLineFront.png")]
+		public static const TREES_FRONT:Class;
+		
 		[Embed(source="../assets/images/turtle3.png")]
         public static const TURTLE:Class;
 		
@@ -65,6 +77,7 @@ package
 			turtle.RUN_SPEED = 200;
 			turtle.DRAG_SPEED = 200;
 			turtle.MAX_SPEED = 200;
+			turtle.MAX_JUMPS = 2;
 			
 			var human:SpriteHolder = new SpriteHolder(HUMAN, 38, 100);
 			human.GRAVITY = 420;

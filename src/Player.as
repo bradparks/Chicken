@@ -12,7 +12,7 @@ package
 		public var JUMP_SPEED:int = 420;
 		public var DRAG_SPEED:int = 200;
 		public var MAX_SPEED:int = 400;
-		public var MAX_JUMP:int = 2;
+		public var MAX_JUMP:int = 1;
 		
 		public var defaultkeys:Boolean;
 		
@@ -248,6 +248,7 @@ package
 					enemy.GRAVITY = sprite.GRAVITY;
 					enemy.RUN_SPEED = sprite.RUN_SPEED;
 					enemy.DRAG_SPEED = sprite.DRAG_SPEED;
+					enemy.MAX_JUMP = sprite.MAX_JUMPS;
 					
 					enemy.y -= enemy.height - tempheight;
 					enemy.velocity.y -= 100;

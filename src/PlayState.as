@@ -4,6 +4,7 @@ package
 	import org.flixel.FlxObject;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxRect;
+	import org.flixel.FlxSprite;
 	import org.flixel.FlxState;
 	import org.flixel.FlxTilemap;
 	import org.flixel.FlxG;
@@ -22,6 +23,13 @@ package
 		public var p2:Player;
 		public var dummy:FlxObject = new FlxObject();
 		public var players:FlxGroup = new FlxGroup();
+		public var skybox:FlxSprite;
+		
+		public var mountaingroup:FlxGroup = new FlxGroup();
+		public var mountain1:FlxSprite;
+		public var mountain2:FlxSprite;
+		public var backtrees:FlxSprite;
+		public var fronttrees:FlxSprite;
 		
 		public var goal:Goal;
 		
@@ -40,6 +48,26 @@ package
 			
 			super.create();
 			
+			skybox = new FlxSprite(0, 0, Assets.SKYBOX);
+			skybox.scrollFactor.x = skybox.scrollFactor.y = 0;
+			add(skybox);
+			
+			add(mountaingroup);
+			mountain1 = new FlxSprite(0, FlxG.height - 402, Assets.MOUNTAINS);
+			mountain1.scrollFactor.x = 0.2;
+			mountain1.scrollFactor.y = 0;
+			add(mountain1);
+			
+			backtrees = new FlxSprite(0, FlxG.height - 241, Assets.TREES_FRONT);
+			backtrees.scrollFactor.x = 0.4;
+			backtrees.scrollFactor.y = 0;
+			add(backtrees);
+			
+			fronttrees = new FlxSprite(0, FlxG.height - 305, Assets.TREES_FRONT);
+			fronttrees.scrollFactor.x = 0.6;
+			fronttrees.scrollFactor.y = 0;
+			add(fronttrees);
+			
 			FlxG.flash();
 			
 			Registry.lvl = this;
@@ -47,6 +75,9 @@ package
 			map = new FlxTilemap;
 			//trace(new Assets.LEVEL);
 			map.loadMap(new Assets.LEVEL, Assets.FOREST, 32, 32);
+			map.setTileProperties(4, FlxObject.NONE);
+			map.setTileProperties(5, FlxObject.NONE);
+			map.setTileProperties(9, FlxObject.NONE);
 			add(map);
 			
 			p1 = new Player(50, 0);
@@ -97,10 +128,12 @@ package
 			if ( p1.x > p2.x )
 			{
 				dummy.x = Utils.Lerp(dummy.x, p1.x, 0.1);
+				dummy.y = Utils.Lerp(dummy.y, p1.y, 0.1);
 			}
 			else
 			{
 				dummy.x = Utils.Lerp(dummy.x, p2.x, 0.1);
+				dummy.y = Utils.Lerp(dummy.y, p2.x, 0.1);
 			}
 		}
 		
