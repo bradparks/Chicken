@@ -5,6 +5,7 @@ package
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxRect;
 	import org.flixel.FlxSound;
+	import org.flixel.FlxSprite;
 	import org.flixel.FlxState;
 	import org.flixel.FlxTilemap;
 	import org.flixel.FlxG;
@@ -24,6 +25,12 @@ package
 		public var p2:Player;
 		public var dummy:FlxObject = new FlxObject(); // HACK
 		public var players:FlxGroup = new FlxGroup();
+		public var skybox:FlxSprite;
+		public var mountaingroup:FlxGroup = new FlxGroup();
+		public var backtreesgroup:FlxGroup = new FlxGroup();
+		public var fronttreesgroup:FlxGroup = new FlxGroup();
+		public var guiGroup:FlxGroup = new FlxGroup();
+		
 		public var goal:Goal;
 		
 		public var happy : FlxSound;
@@ -45,6 +52,15 @@ package
 			
 			super.create();
 			
+			skybox = new FlxSprite(0, 0, Assets.SKYBOX);
+			skybox.scrollFactor.x = skybox.scrollFactor.y = 0;
+			add(skybox);
+			
+			add(mountaingroup);
+			add(backtreesgroup);
+			add(fronttreesgroup);
+			add(guiGroup);
+			
 			FlxG.flash();
 			
 			Registry.lvl = this;
@@ -52,6 +68,9 @@ package
 			map = new FlxTilemap;
 			//trace(new Assets.LEVEL);
 			map.loadMap(new Assets.LEVEL, Assets.FOREST, 32, 32);
+			map.setTileProperties(4, FlxObject.NONE);
+			map.setTileProperties(5, FlxObject.NONE);
+			map.setTileProperties(9, FlxObject.NONE);
 			add(map);
 			
 			p1 = new Player(50, 0);
@@ -71,6 +90,30 @@ package
 			FlxG.worldBounds = new FlxRect(map.x, map.y, map.width, map.height);
 			FlxG.camera.setBounds(0, 0, map.width, map.height);
 			PickCamera();
+			
+			for (var x:int = 0; x < (FlxG.worldBounds.width / int(2520 * 0.2)) + 1; x++)
+			{
+				var mountain4:FlxSprite = new FlxSprite(x * 2520, FlxG.height - 402, Assets.MOUNTAINS);
+				mountain4.scrollFactor.x = 0.2;
+				mountain4.scrollFactor.y = 0;
+				mountaingroup.add(mountain4);
+			}
+			
+			for (var x:int = 0; x < (FlxG.worldBounds.width / int(1099 * 0.4)) + 1; x++)
+			{
+				var backtrees4:FlxSprite = new FlxSprite(x * 1099, FlxG.height - 241, Assets.TREES_FRONT);
+				backtrees4.scrollFactor.x = 0.4;
+				backtrees4.scrollFactor.y = 0;
+				backtreesgroup.add(backtrees4);
+			}
+			
+			for (var x:int = 0; x < (FlxG.worldBounds.width / int(1574 * 0.6)) + 1; x++)
+			{
+				var fronttrees4:FlxSprite = new FlxSprite(x * 1574, FlxG.height - 305, Assets.TREES_FRONT);
+				fronttrees4.scrollFactor.x = 0.6;
+				fronttrees4.scrollFactor.y = 0;
+				fronttreesgroup.add(fronttrees4);
+			}
 			
 			// Start playing main sounds
 			happy = FlxG.play(Assets.HAPPY_LOOP, 1, true);
@@ -113,11 +156,13 @@ package
 			{
 				dummy.x = Utils.Lerp(dummy.x, p1.x, LERP_RATE);
 				dummy.y = Utils.Lerp(dummy.y, p1.y, LERP_RATE);
+				dummy.y = Utils.Lerp(dummy.y, p1.y, 0.1);
 			}
 			else
 			{
 				dummy.x = Utils.Lerp(dummy.x, p2.x, LERP_RATE);
 				dummy.y = Utils.Lerp(dummy.y, p1.y, LERP_RATE);
+				dummy.y = Utils.Lerp(dummy.y, p2.x, 0.1);
 			}
 		}
 		

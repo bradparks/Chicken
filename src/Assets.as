@@ -32,6 +32,18 @@ package
 		[Embed(source="../assets/images/Tuiles_32.png")]
         public static const FOREST:Class;
 		
+		[Embed(source="../assets/images/TuileCiel2.png")]
+		public static const SKYBOX:Class;
+		
+		[Embed(source="../assets/images/Mountains.png")]
+		public static const MOUNTAINS:Class;
+		
+		[Embed(source="../assets/images/TreeLineBack.png")]
+		public static const TREES_BACK:Class;
+		
+		[Embed(source="../assets/images/TreeLineFront.png")]
+		public static const TREES_FRONT:Class;
+		
 		[Embed(source="../assets/images/turtle3.png")]
         public static const TURTLE:Class;
 		
@@ -43,6 +55,9 @@ package
 		
 		[Embed(source="../assets/images/ChickenSprite.png")]
         public static const CHICKEN:Class;
+		
+		[Embed(source="../assets/images/elephant.png")]
+        public static const ELEPHANT:Class;
 		
 		
 		// MISCS
@@ -59,7 +74,7 @@ package
 		
 		public static var CASUAL_INSULTS:Array = [];
 		public static var INSULTS_OF_DEATH:Array = [];
-		public static var animals:Array = ["pig", "chicken", "turtle", "human", "chicken"];
+		public static var animals:Array = ["pig", "chicken", "turtle", "human", "chicken", "elephant"];
 		public static var animaldict:Dictionary = new Dictionary();
 		
 		
@@ -74,7 +89,7 @@ package
 			CASUAL_INSULTS = x.split("\n");
 			INSULTS_OF_DEATH = y.split("\n");
 			
-			//trace(CASUAL_INSULTS.length, INSULTS_OF_DEATH.length);
+			//trace(INSULTS_OF_DEATH);
 		}
 		
 		public static function loadAnimals():void
@@ -92,6 +107,7 @@ package
 			turtle.RUN_SPEED = 200;
 			turtle.DRAG_SPEED = 200;
 			turtle.MAX_SPEED = 200;
+			turtle.MAX_JUMPS = 2;
 			
 			var human:SpriteHolder = new SpriteHolder(HUMAN, 38, 100);
 			human.GRAVITY = 420;
@@ -108,10 +124,19 @@ package
 			chicken.MAX_SPEED = 400;
 			chicken.walkfps = 18;
 			
+			var elephant:SpriteHolder = new SpriteHolder(ELEPHANT, 158, 105);
+			elephant.GRAVITY = 500;
+			elephant.JUMP_SPEED = 200;
+			elephant.RUN_SPEED = 300;
+			elephant.DRAG_SPEED = 300;
+			elephant.MAX_SPEED = 300;
+			//elephant.walkfps = 18;
+			
 			animaldict["pig"] = pig;
 			animaldict["turtle"] = turtle;
 			animaldict["human"] = human;
 			animaldict["chicken"] = chicken;
+			animaldict["elephant"] = elephant;
 		}
 		
 	}

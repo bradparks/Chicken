@@ -6,13 +6,20 @@ package
 
 	public class Player extends FlxSprite
 	{
+		// GUI STUFF
+		public const GUI_OFFSET_X = 0.04;
+		public const GUI_OFFSET_Y = 0.04;
+		public const GUI_SCALE_X = 0.90;
+		public const GUI_SCALE_Y = 0.90;
 		
+		
+		// CHARA CONTROL STUFF
 		public var RUN_SPEED:int = 400;
 		public var GRAVITY:int = 420;
 		public var JUMP_SPEED:int = 420;
 		public var DRAG_SPEED:int = 200;
 		public var MAX_SPEED:int = 400;
-		public var MAX_JUMP:int = 2;
+		public var MAX_JUMP:int = 1;
 		
 		public var defaultkeys:Boolean;
 		
@@ -21,6 +28,7 @@ package
 		public var insultincrement:Number = 0.8;
 		
 		public var bar:FlxBar;
+		public var gaugeSprite:FlxSprite
 		public var status:FlxText;
 		public var insult:FlxText;
 		public var curNbJump:int = 0;
@@ -48,8 +56,8 @@ package
 			//addAnimation("Jump", [6, 7, 8], 2, false);
 			
 			addAnimation("Idle", [5, 6], 2, true);
-			addAnimation("Walk", [0, 1, 2, 3, 4, ], 6, true);
-			addAnimation("Jump", [0, 1, 2, 3, 4, ], 2, false);
+			addAnimation("Walk", [0, 1, 2, 3, 4], 6, true);
+			addAnimation("Jump", [0, 1, 2, 3, 4], 2, false);
 			
 			drag.x = DRAG_SPEED;  // Drag is how quickly you slow down when you're not pushing a button. By using a multiplier, it will always scale to the run speed, even if we change it.
             acceleration.y = GRAVITY; // Always try to push helmutguy in the direction of gravity
@@ -75,16 +83,32 @@ package
 			
 			if (defaultkeys)
 			{
-				bar = new FlxBar(0, 0, FlxBar.FILL_LEFT_TO_RIGHT, 200, 20, this, "insultpower");
+				gaugeSprite = new FlxSprite(0, 0, Assets.GAUGE);
+				gaugeSprite.x = FlxG.width * GUI_OFFSET_X;
+				gaugeSprite.y = FlxG.height * GUI_OFFSET_Y;
+				gaugeSprite.scrollFactor.x = 0;
+				gaugeSprite.scrollFactor.y = 0;
 				
-				status = new FlxText(0, 30, 200, "You are a chicken");
+				bar = new FlxBar(gaugeSprite.x, gaugeSprite.y, FlxBar.FILL_LEFT_TO_RIGHT, gaugeSprite.width, gaugeSprite.height, this, "insultpower");
+				bar.createFilledBar(0xFFAAAAAA, 0xFFFFAAAA);
+				status = new FlxText(gaugeSprite.x, gaugeSprite.y + gaugeSprite.height, 200, "You are a chicken");
+				status.alignment = "center";
 			}
 			
 			else
 			{
-				bar = new FlxBar(FlxG.width - 200, 0, FlxBar.FILL_LEFT_TO_RIGHT, 200, 20, this, "insultpower");
 				
-				status = new FlxText(FlxG.width - 200, 30, 200, "You are a human");
+				gaugeSprite = new FlxSprite(0, 0, Assets.GAUGE);
+				gaugeSprite.x = FlxG.width - gaugeSprite.width - FlxG.width * GUI_OFFSET_X;
+				gaugeSprite.y = FlxG.height * GUI_OFFSET_Y;
+				gaugeSprite.scrollFactor.x = 0;
+				gaugeSprite.scrollFactor.y = 0;
+				
+				
+				bar = new FlxBar(gaugeSprite.x, gaugeSprite.y, FlxBar.FILL_LEFT_TO_RIGHT, gaugeSprite.width, gaugeSprite.height, this, "insultpower");
+				bar.createFilledBar(0xFFAAAAAA, 0xFFFFAAAA);
+				status = new FlxText(gaugeSprite.x, gaugeSprite.y + gaugeSprite.height, 200, "You are a chicken");
+				status.alignment = "center";
 			}
 			
 			status.size = 12;
@@ -95,6 +119,7 @@ package
 			
 			bar.scrollFactor.x = bar.scrollFactor.y = 0;
 			lvl.add(bar);
+			lvl.add(gaugeSprite);
 			
 			emitter = new FlxEmitter(_x, _y, 30);
 			lvl.add(emitter);
@@ -124,26 +149,28 @@ package
 			
 			if (defaultkeys)
 			{
-				if(FlxG.keys.LEFT)
+				if(FlxG.keys.J)
 				{
 					facing = LEFT;
 					acceleration.x -= DRAG_SPEED;
 				}
-				else if(FlxG.keys.RIGHT)
+				else if(FlxG.keys.L)
 				{
 					facing = RIGHT;
 					insultpower += insultincrement;
 					acceleration.x += DRAG_SPEED;
 				}
-				if(FlxG.keys.justPressed("UP"))
+				if(FlxG.keys.justPressed("I"))
 				{
 					morphEnemy();
 					//velocity.y = -JUMP_SPEED;
 					//FlxG.play(SndJump);
 				}
-				if(FlxG.keys.justPressed("SPACE") && CanJump() )
+				if(FlxG.keys.justPressed("SPACE") && !velocity.y)
 				{
-					Jump();
+					//Jump();
+					velocity.y = -JUMP_SPEED;
+					play("Jump");
 					//FlxG.play(SndJump);
 				}
 			}
@@ -167,9 +194,11 @@ package
 					//velocity.y = -JUMP_SPEED;
 					//FlxG.play(SndJump);
 				}
-				if(FlxG.keys.justPressed("SPACE") && CanJump())
+				if(FlxG.keys.justPressed("SPACE") && !velocity.y)
 				{
-					Jump();
+					//Jump();
+					velocity.y = -JUMP_SPEED;
+					play("Jump");
 					//FlxG.play(SndJump);
 				}
 			}
@@ -180,14 +209,14 @@ package
 				//else if(_aim == DOWN) play("jump_down");
 				//else play("jump");
 			//}
-			if (velocity.x == 0 && isTouching(FlxObject.DOWN))
+			if (velocity.x == 0 && !velocity.y)
 			{
-				play("Idle");
+					play("Idle");
 			}
 			
 			else
 			{
-				if (isTouching(FlxObject.DOWN)) play("Walk");
+					if (!velocity.y) play("Walk");
 			}
 			//else
 			//{
@@ -230,26 +259,17 @@ package
 					
 					//enemy.y -= enemy.height - tempheight;
 					
-					if (ani != "human")
-					{
-						enemy.addAnimation("Idle", [3, 4, 5], 2, true);
-						enemy.addAnimation("Walk", [0, 1, 2], sprite.walkfps, true);
-						enemy.addAnimation("Jump", [6, 7, 8], 2, false);
-					}
-					
-					else
-					{
-						enemy.addAnimation("Idle", [5, 6], 2, true);
-						enemy.addAnimation("Walk", [0, 1, 2, 3, 4, ], 6, true);
-						enemy.addAnimation("Jump", [0, 1, 2, 3, 4, ], 2, false);
-					}
+					enemy.addAnimation("Idle", [3, 4, 5], 2, true);
+					enemy.addAnimation("Walk", [0, 1, 2], 6, true);
+					enemy.addAnimation("Jump", [6, 7, 8], 2, false);
 					
 					enemy.JUMP_SPEED = sprite.JUMP_SPEED;
 					enemy.GRAVITY = sprite.GRAVITY;
 					enemy.RUN_SPEED = sprite.RUN_SPEED;
 					enemy.DRAG_SPEED = sprite.DRAG_SPEED;
+					enemy.MAX_JUMP = sprite.MAX_JUMPS;
 					
-					enemy.y -= enemy.height - tempheight;
+					//enemy.y -= enemy.height - tempheight;
 					enemy.velocity.y -= 100;
 				}
 			}
@@ -267,7 +287,7 @@ package
 			
 			FlxG.shake(0.01);
 			FlxG.flash(0xffffffff);
-			insultpower = 0.0;
+			//insultpower = 0.0;
 			//enemy.JUMP_SPEED = FlxMath.randFloat(0.5, 2) * INIT_JUMP_SPEED;
 			//enemy.GRAVITY = FlxMath.randFloat(0.5, 2) * INIT_GRAVITY;
 			//enemy.RUN_SPEED = FlxMath.randFloat(0.5, 2) * INIT_SPEED;

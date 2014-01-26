@@ -13,6 +13,7 @@ package
 		public var fheight:int;
 		public var walkfps:Number = 6;
 		
+		public var MAX_JUMPS:Number = 1;
 		public var RUN_SPEED:int = 400;
 		public var GRAVITY:int = 420;
 		public var JUMP_SPEED:int = 420;
