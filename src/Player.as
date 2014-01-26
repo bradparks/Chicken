@@ -48,8 +48,8 @@ package
 			//addAnimation("Jump", [6, 7, 8], 2, false);
 			
 			addAnimation("Idle", [5, 6], 2, true);
-			addAnimation("Walk", [0, 1, 2, 3, 4, ], 6, true);
-			addAnimation("Jump", [0, 1, 2, 3, 4, ], 2, false);
+			addAnimation("Walk", [0, 1, 2, 3, 4], 6, true);
+			addAnimation("Jump", [0, 1, 2, 3, 4], 2, false);
 			
 			drag.x = DRAG_SPEED;  // Drag is how quickly you slow down when you're not pushing a button. By using a multiplier, it will always scale to the run speed, even if we change it.
             acceleration.y = GRAVITY; // Always try to push helmutguy in the direction of gravity
@@ -124,26 +124,28 @@ package
 			
 			if (defaultkeys)
 			{
-				if(FlxG.keys.LEFT)
+				if(FlxG.keys.J)
 				{
 					facing = LEFT;
 					acceleration.x -= DRAG_SPEED;
 				}
-				else if(FlxG.keys.RIGHT)
+				else if(FlxG.keys.L)
 				{
 					facing = RIGHT;
 					insultpower += insultincrement;
 					acceleration.x += DRAG_SPEED;
 				}
-				if(FlxG.keys.justPressed("UP"))
+				if(FlxG.keys.justPressed("I"))
 				{
 					morphEnemy();
 					//velocity.y = -JUMP_SPEED;
 					//FlxG.play(SndJump);
 				}
-				if(FlxG.keys.justPressed("SPACE") && CanJump() )
+				if(FlxG.keys.justPressed("SPACE") && !velocity.y)
 				{
-					Jump();
+					//Jump();
+					velocity.y = -JUMP_SPEED;
+					play("Jump");
 					//FlxG.play(SndJump);
 				}
 			}
@@ -167,9 +169,11 @@ package
 					//velocity.y = -JUMP_SPEED;
 					//FlxG.play(SndJump);
 				}
-				if(FlxG.keys.justPressed("SPACE") && CanJump())
+				if(FlxG.keys.justPressed("SPACE") && !velocity.y)
 				{
-					Jump();
+					//Jump();
+					velocity.y = -JUMP_SPEED;
+					play("Jump");
 					//FlxG.play(SndJump);
 				}
 			}
@@ -180,14 +184,14 @@ package
 				//else if(_aim == DOWN) play("jump_down");
 				//else play("jump");
 			//}
-			if (velocity.x == 0 && isTouching(FlxObject.DOWN))
+			if (velocity.x == 0 && !velocity.y)
 			{
-				play("Idle");
+					play("Idle");
 			}
 			
 			else
 			{
-				if (isTouching(FlxObject.DOWN)) play("Walk");
+					if (!velocity.y) play("Walk");
 			}
 			//else
 			//{
@@ -230,19 +234,9 @@ package
 					
 					//enemy.y -= enemy.height - tempheight;
 					
-					if (ani != "human")
-					{
-						enemy.addAnimation("Idle", [3, 4, 5], 2, true);
-						enemy.addAnimation("Walk", [0, 1, 2], sprite.walkfps, true);
-						enemy.addAnimation("Jump", [6, 7, 8], 2, false);
-					}
-					
-					else
-					{
-						enemy.addAnimation("Idle", [5, 6], 2, true);
-						enemy.addAnimation("Walk", [0, 1, 2, 3, 4, ], 6, true);
-						enemy.addAnimation("Jump", [0, 1, 2, 3, 4, ], 2, false);
-					}
+					 enemy.addAnimation("Idle", [3, 4, 5], 2, true);
+					enemy.addAnimation("Walk", [0, 1, 2], 6, true);
+					enemy.addAnimation("Jump", [6, 7, 8], 2, false);
 					
 					enemy.JUMP_SPEED = sprite.JUMP_SPEED;
 					enemy.GRAVITY = sprite.GRAVITY;
@@ -250,7 +244,7 @@ package
 					enemy.DRAG_SPEED = sprite.DRAG_SPEED;
 					enemy.MAX_JUMP = sprite.MAX_JUMPS;
 					
-					enemy.y -= enemy.height - tempheight;
+					//enemy.y -= enemy.height - tempheight;
 					enemy.velocity.y -= 100;
 				}
 			}
@@ -268,7 +262,7 @@ package
 			
 			FlxG.shake(0.01);
 			FlxG.flash(0xffffffff);
-			insultpower = 0.0;
+			//insultpower = 0.0;
 			//enemy.JUMP_SPEED = FlxMath.randFloat(0.5, 2) * INIT_JUMP_SPEED;
 			//enemy.GRAVITY = FlxMath.randFloat(0.5, 2) * INIT_GRAVITY;
 			//enemy.RUN_SPEED = FlxMath.randFloat(0.5, 2) * INIT_SPEED;

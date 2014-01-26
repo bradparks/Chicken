@@ -34,6 +34,9 @@ package
 		[Embed(source="../assets/images/ChickenSprite.png")]
         public static const CHICKEN:Class;
 		
+		[Embed(source="../assets/images/elephant.png")]
+        public static const ELEPHANT:Class;
+		
 		[Embed(source="../assets/lvls/mapCSV_Group1_Map1.csv", mimeType="application/octet-stream")]
 		public static const LEVEL:Class;
 		
@@ -46,7 +49,7 @@ package
 		public static var CASUAL_INSULTS:Array = [];
 		public static var INSULTS_OF_DEATH:Array = [];
 		
-		public static var animals:Array = ["pig", "chicken", "turtle", "human", "chicken"];
+		public static var animals:Array = ["pig", "chicken", "turtle", "human", "chicken", "elephant"];
 		
 		public static var animaldict:Dictionary = new Dictionary();
 		
@@ -59,7 +62,7 @@ package
 			CASUAL_INSULTS = x.split("\n");
 			INSULTS_OF_DEATH = y.split("\n");
 			
-			//trace(CASUAL_INSULTS.length, INSULTS_OF_DEATH.length);
+			//trace(INSULTS_OF_DEATH);
 		}
 		
 		public static function loadAnimals():void
@@ -94,10 +97,19 @@ package
 			chicken.MAX_SPEED = 400;
 			chicken.walkfps = 18;
 			
+			var elephant:SpriteHolder = new SpriteHolder(ELEPHANT, 158, 105);
+			elephant.GRAVITY = 500;
+			elephant.JUMP_SPEED = 200;
+			elephant.RUN_SPEED = 300;
+			elephant.DRAG_SPEED = 300;
+			elephant.MAX_SPEED = 300;
+			//elephant.walkfps = 18;
+			
 			animaldict["pig"] = pig;
 			animaldict["turtle"] = turtle;
 			animaldict["human"] = human;
 			animaldict["chicken"] = chicken;
+			animaldict["elephant"] = elephant;
 		}
 		
 	}

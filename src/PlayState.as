@@ -4,6 +4,7 @@ package
 	import org.flixel.FlxObject;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxRect;
+	import org.flixel.FlxSave;
 	import org.flixel.FlxSprite;
 	import org.flixel.FlxState;
 	import org.flixel.FlxTilemap;
@@ -17,22 +18,18 @@ package
 	{
 		
 		public const RESPAWN_DIST : int = 100;
+		public const LERP_RATE : Number = 0.2;
 		
 		public var map:FlxTilemap;
 		public var p1:Player;
 		public var p2:Player;
 		public var dummy:FlxObject = new FlxObject();
 		public var players:FlxGroup = new FlxGroup();
-		public var skybox:FlxSprite;
 		
+		public var skybox:FlxSprite;
 		public var mountaingroup:FlxGroup = new FlxGroup();
 		public var backtreesgroup:FlxGroup = new FlxGroup();
 		public var fronttreesgroup:FlxGroup = new FlxGroup();
-		
-		public var mountain1:FlxSprite;
-		public var mountain2:FlxSprite;
-		public var backtrees:FlxSprite;
-		public var fronttrees:FlxSprite;
 		
 		public var goal:Goal;
 		
@@ -55,25 +52,9 @@ package
 			skybox.scrollFactor.x = skybox.scrollFactor.y = 0;
 			add(skybox);
 			
-			//add(mountaingroup);
-			mountain1 = new FlxSprite(0, FlxG.height - 402, Assets.MOUNTAINS);
-			mountain1.scrollFactor.x = 0.2;
-			mountain1.scrollFactor.y = 0;
-			add(mountain1);
-			
-			backtrees = new FlxSprite(0, FlxG.height - 241, Assets.TREES_FRONT);
-			backtrees.scrollFactor.x = 0.4;
-			backtrees.scrollFactor.y = 0;
-			add(backtrees);
-			
-			fronttrees = new FlxSprite(0, FlxG.height - 305, Assets.TREES_FRONT);
-			fronttrees.scrollFactor.x = 0.6;
-			fronttrees.scrollFactor.y = 0;
-			add(fronttrees);
-			
 			add(mountaingroup);
-			add(backtrees);
-			add(fronttrees);
+			add(backtreesgroup);
+			add(fronttreesgroup);
 			
 			FlxG.flash();
 			
@@ -105,7 +86,29 @@ package
 			FlxG.camera.setBounds(0, 0, map.width, map.height);
 			PickCamera();
 			
-			for (var x = (FlxG.worldBounds.width / int(2520 * 0.2)) + 1; x++)
+			for (var x:int = 0; x < (FlxG.worldBounds.width / int(2520 * 0.2)) + 1; x++)
+			{
+				var mountain4:FlxSprite = new FlxSprite(x * 2520, FlxG.height - 402, Assets.MOUNTAINS);
+				mountain4.scrollFactor.x = 0.2;
+				mountain4.scrollFactor.y = 0;
+				mountaingroup.add(mountain4);
+			}
+			
+			for (var x:int = 0; x < (FlxG.worldBounds.width / int(1099 * 0.4)) + 1; x++)
+			{
+				var backtrees4:FlxSprite = new FlxSprite(x * 1099, FlxG.height - 241, Assets.TREES_FRONT);
+				backtrees4.scrollFactor.x = 0.4;
+				backtrees4.scrollFactor.y = 0;
+				backtreesgroup.add(backtrees4);
+			}
+			
+			for (var x:int = 0; x < (FlxG.worldBounds.width / int(1574 * 0.6)) + 1; x++)
+			{
+				var fronttrees4:FlxSprite = new FlxSprite(x * 1574, FlxG.height - 305, Assets.TREES_FRONT);
+				fronttrees4.scrollFactor.x = 0.6;
+				fronttrees4.scrollFactor.y = 0;
+				fronttreesgroup.add(fronttrees4);
+			}
 		}
 		
 		/**
@@ -126,27 +129,29 @@ package
 			
 			FlxG.collide(map, players);
 			FlxG.collide(map, goal);
-			FlxG.collide(players);
+			//FlxG.collide(players);
 			
 			PickCamera();
 			RespawnIfOutOfScreen();
 		}
 		
-		private function PickCamera()
+		private function PickCamera() : void
 		{
 			if ( p1.x > p2.x )
 			{
-				dummy.x = Utils.Lerp(dummy.x, p1.x, 0.1);
+				dummy.x = Utils.Lerp(dummy.x, p1.x, LERP_RATE);
+				dummy.y = Utils.Lerp(dummy.y, p1.y, LERP_RATE);
 				dummy.y = Utils.Lerp(dummy.y, p1.y, 0.1);
 			}
 			else
 			{
-				dummy.x = Utils.Lerp(dummy.x, p2.x, 0.1);
+				dummy.x = Utils.Lerp(dummy.x, p2.x, LERP_RATE);
+				dummy.y = Utils.Lerp(dummy.y, p1.y, LERP_RATE);
 				dummy.y = Utils.Lerp(dummy.y, p2.x, 0.1);
 			}
 		}
 		
-		private function RespawnIfOutOfScreen():void
+		private function RespawnIfOutOfScreen() : void
 		{
 			if ( ! p1.onScreen() )
 			{
@@ -164,7 +169,7 @@ package
 			var tileSize : int = map.width / map.widthInTiles;
 			var column : int = (spawnX / map.width) * map.widthInTiles;
 			
-			for ( var i : int = map.heightInTiles ; i > 0 ; --i )
+			for ( var i : int = 0 ; i < map.heightInTiles ; ++i )
 			{
 				var tile : int = map.getTile(column, i);
 				if ( tile != 0 )
