@@ -101,7 +101,7 @@ package org.flixel
 		 * @param	Label		The text that you want to appear on the button.
 		 * @param	OnClick		The function to call whenever the button is clicked.
 		 */
-		public function FlxButton(X:Number=0,Y:Number=0,Label:String=null,OnClick:Function=null,Param=null)
+		public function FlxButton(X:Number=0,Y:Number=0,Label:String=null, OnClick:Function=null, Param:*=null)
 		{
 			super(X, Y);
 			parameters = Param;

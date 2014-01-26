@@ -151,11 +151,25 @@ package
 			
 			FlxG.collide(map, players);
 			FlxG.collide(map, goal);
+			FlxG.collide(players, goal, giveWin);
 			//FlxG.collide(players);
 			
 			PickCamera();
 			RespawnIfOutOfScreen();
 			InterpolateSound();
+		}
+		
+		private function giveWin(p:Player, e) : void
+		{
+			if (p == p1)
+			{
+				FlxG.switchState(new LoseState(true));
+			}
+			
+			else
+			{
+				FlxG.switchState(new LoseState(false));
+			}
 		}
 		
 		private function PickCamera() : void

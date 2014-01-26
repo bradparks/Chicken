@@ -37,8 +37,9 @@ package
 			var numberolvls:uint = Assets.lvls.length;
 			for (var currentlvl:uint = 1; currentlvl <= numberolvls;  currentlvl++)
 			{
-				lvlindex = currentlvl;
-				var lvlbutton:FlxButton = new FlxButton(10 + 180 * (currentlvl - 1), 10 + 45 * (currentlvl/3), String(currentlvl), loadlvl);
+				//lvlindex = currentlvl;
+				var lvlbutton:FlxButton = new FlxButton(10 + 180 * (currentlvl - 1), 10 + 45 * (currentlvl / 3), String(currentlvl), loadlvl, currentlvl);
+				//lvlbutton.parameters = currentlvl;
 				lvlbutton.scrollFactor = new FlxPoint(0, 0);
 				lvlbutton.scale.x = lvlbutton.scale.y = 2;
 				lvlbutton.x += lvlbutton.frameWidth / 2;
@@ -48,11 +49,12 @@ package
 			}
 		}
 		
-		public function loadlvl():void
+		public function loadlvl(LVL:uint):void
 		{
 			//trace(lvltoload);
 			super.destroy();
-			FlxG.switchState(new PlayState(lvlindex - 1));
+			//trace(LVL - 1);
+			FlxG.switchState(new PlayState(LVL - 1));
 		}
 		
 		public function goback():void

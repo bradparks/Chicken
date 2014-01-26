@@ -91,7 +91,7 @@ package
 				
 				bar = new FlxBar(gaugeSprite.x, gaugeSprite.y, FlxBar.FILL_LEFT_TO_RIGHT, gaugeSprite.width, gaugeSprite.height, this, "insultpower");
 				bar.createFilledBar(0xFFAAAAAA, 0xFFFFAAAA);
-				status = new FlxText(gaugeSprite.x, gaugeSprite.y + gaugeSprite.height, 200, "You are a chicken");
+				status = new FlxText(gaugeSprite.x, gaugeSprite.y + gaugeSprite.height, 200, "You are a turtle");
 				status.alignment = "center";
 			}
 			
@@ -108,7 +108,7 @@ package
 				
 				bar = new FlxBar(gaugeSprite.x, gaugeSprite.y, FlxBar.FILL_LEFT_TO_RIGHT, gaugeSprite.width, gaugeSprite.height, this, "insultpower");
 				bar.createFilledBar(0xFFAAAAAA, 0xFFFFAAAA);
-				status = new FlxText(gaugeSprite.x, gaugeSprite.y + gaugeSprite.height, 200, "You are a chicken");
+				status = new FlxText(gaugeSprite.x, gaugeSprite.y + gaugeSprite.height, 200, "You are a turtle");
 				status.alignment = "center";
 			}
 			
@@ -305,7 +305,7 @@ package
 			
 			FlxG.shake(0.01);
 			FlxG.flash(0xffffffff);
-			//insultpower = 0.0;
+			insultpower = 0.0;
 			//enemy.JUMP_SPEED = FlxMath.randFloat(0.5, 2) * INIT_JUMP_SPEED;
 			//enemy.GRAVITY = FlxMath.randFloat(0.5, 2) * INIT_GRAVITY;
 			//enemy.RUN_SPEED = FlxMath.randFloat(0.5, 2) * INIT_SPEED;
@@ -314,10 +314,41 @@ package
 		
 		//Casual insults
 		else
-		{
-			var ins:String = Assets.CASUAL_INSULTS[FlxMath.rand(0, Assets.CASUAL_INSULTS.length - 1)];
-			insult.text = ins;
-			insult.color = 0xff000000;
+		{	
+			if (currentanimal == enemy.currentanimal)
+			{
+				var ins:String = Assets.CASUAL_INSULTS[FlxMath.rand(0, Assets.CASUAL_INSULTS.length - 1)];
+				insult.text = ins;
+				insult.color = 0xff000000;
+			}
+			
+			else
+			{
+				var arr:Array;
+				
+				switch(enemy.currentanimal)
+				{
+					case "pig":
+						arr = Assets.INSULTS_OF_PIG;
+						break;
+					case "chicken":
+						arr = Assets.INSULTS_OF_CHICKEN;
+						break;
+					case "elephant":
+						arr = Assets.INSULTS_OF_ELEPHANT;
+						break;
+					case "human":
+						arr = Assets.INSULTS_OF_HUMAN;
+						break;
+					case "turtle":
+						arr = Assets.INSULTS_OF_TURTLE;
+						break;
+				}
+				
+				var ins:String = arr[FlxMath.rand(0, arr.length - 1)];
+				insult.text = ins;
+				insult.color = 0xff000000;
+			}
 		}
 	}
 	

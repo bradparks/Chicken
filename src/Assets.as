@@ -56,7 +56,7 @@ package
 		[Embed(source="../assets/images/pig.png")]
         public static const PIG:Class;
 		
-		[Embed(source="../assets/images/human_walk_idle.png")]
+		[Embed(source="../assets/images/human3.png")]
         public static const HUMAN:Class;
 		
 		[Embed(source="../assets/images/ChickenSprite.png")]
@@ -70,16 +70,36 @@ package
 		//[Embed(source="../assets/lvls/mapCSV_Group1_Map1.csv", mimeType="application/octet-stream")]
 		//public static const LEVEL:Class;
 		
-		[Embed(source="../assets/insults.txt", mimeType="application/octet-stream")]
+		[Embed(source="../assets/data/genericinsults.txt", mimeType="application/octet-stream")]
 		public static const INSULTS:Class;
 		
-		[Embed(source="../assets/badinsults.txt", mimeType="application/octet-stream")]
+		[Embed(source="../assets/data/badinsults.txt", mimeType="application/octet-stream")]
 		public static const BADINSULTS:Class;
+		
+		[Embed(source="../assets/data/chickeninsults.txt", mimeType="application/octet-stream")]
+		public static const CHICKENINSULTS:Class;
+		
+		[Embed(source="../assets/data/elephantinsults.txt", mimeType="application/octet-stream")]
+		public static const ELEPHANTINSULTS:Class;
+		
+		[Embed(source="../assets/data/humaninsults.txt", mimeType="application/octet-stream")]
+		public static const HUMANINSULTS:Class;
+		
+		[Embed(source="../assets/data/piginsults.txt", mimeType="application/octet-stream")]
+		public static const PIGINSULTS:Class;
+		
+		[Embed(source="../assets/data/turtleinsults.txt", mimeType="application/octet-stream")]
+		public static const TURTLEINSULTS:Class;
 		
 		
 		
 		public static var CASUAL_INSULTS:Array = [];
 		public static var INSULTS_OF_DEATH:Array = [];
+		public static var INSULTS_OF_CHICKEN:Array = [];
+		public static var INSULTS_OF_PIG:Array = [];
+		public static var INSULTS_OF_HUMAN:Array = [];
+		public static var INSULTS_OF_TURTLE:Array = [];
+		public static var INSULTS_OF_ELEPHANT:Array = [];
 		public static var animals:Array = ["pig", "chicken", "turtle", "human", "elephant"];
 		public static var animaldict:Dictionary = new Dictionary();
 		
@@ -87,16 +107,32 @@ package
 		[Embed(source="../assets/lvls/mapCSV_Group1_Map1.csv", mimeType="application/octet-stream")]
 		public static const LEVEL:Class;
 		
-		public static var lvls:Array = [LEVEL];
+		[Embed(source="../assets/lvls/l2.csv", mimeType="application/octet-stream")]
+		public static const LEVEL2:Class;
+		
+		[Embed(source="../assets/lvls/level3.csv", mimeType="application/octet-stream")]
+		public static const LEVEL3:Class;
+		
+		public static var lvls:Array = [LEVEL, LEVEL2, LEVEL3];
 		
 		public static function ParseInsults():void 
 		{
-			var x:String = new INSULTS;
-			var y:String = new BADINSULTS;
+			var a:String = new INSULTS;
+			var b:String = new BADINSULTS;
+			var c:String = new PIGINSULTS;
+			var d:String = new ELEPHANTINSULTS;
+			var e:String = new CHICKENINSULTS;
+			var f:String = new HUMANINSULTS;
+			var g:String = new TURTLEINSULTS;
 			
 			
-			CASUAL_INSULTS = x.split("\n");
-			INSULTS_OF_DEATH = y.split("\n");
+			CASUAL_INSULTS = a.split("\n");
+			INSULTS_OF_DEATH = b.split("\n");
+			INSULTS_OF_PIG = c.split("\n");
+			INSULTS_OF_ELEPHANT = d.split("\n");
+			INSULTS_OF_CHICKEN = e.split("\n");
+			INSULTS_OF_HUMAN = f.split("\n");
+			INSULTS_OF_TURTLE = g.split("\n");
 			
 			//trace(INSULTS_OF_DEATH);
 		}

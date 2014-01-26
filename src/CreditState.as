@@ -20,7 +20,6 @@ package
 		override public function create():void 
 		{
 			super.create();
-			FlxG.bgColor = 0xff80CAFF;
 			FlxG.mouse.show();
 			
 			splash = new FlxSprite(0, 0, Assets.SPLASH);
