@@ -16,9 +16,10 @@ package
 	 */
 	public class PlayState extends FlxState
 	{
+		public var lvlindex:uint;
 		
 		public const RESPAWN_DIST : int = 100;
-		public const LERP_RATE : Number = 0.2;
+		public const LERP_RATE : Number = 0.1;
 		
 		public var map:FlxTilemap;
 		public var p1:Player;
@@ -33,9 +34,10 @@ package
 		
 		public var goal:Goal;
 		
-		public function PlayState()
+		public function PlayState(LVL:uint)
 		{
 			super();
+			lvlindex = LVL;
 			Assets.ParseInsults();
 			Assets.loadAnimals();
 		}
@@ -62,7 +64,7 @@ package
 			
 			map = new FlxTilemap;
 			//trace(new Assets.LEVEL);
-			map.loadMap(new Assets.LEVEL, Assets.FOREST, 32, 32);
+			map.loadMap(new Assets.lvls[lvlindex], Assets.FOREST, 32, 32);
 			map.setTileProperties(4, FlxObject.NONE);
 			map.setTileProperties(5, FlxObject.NONE);
 			map.setTileProperties(9, FlxObject.NONE);
@@ -79,7 +81,7 @@ package
 			
 			FlxG.camera.follow(dummy, FlxCamera.STYLE_PLATFORMER);
 			
-			goal = new Goal(map.x + map.width - 200, 0);
+			goal = new Goal(map.x + map.width - 100, 0);
 			add(goal);
 			
 			FlxG.worldBounds = new FlxRect(map.x, map.y, map.width, map.height);

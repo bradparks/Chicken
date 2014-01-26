@@ -1,5 +1,6 @@
 package  
 {
+	import org.flixel.FlxSprite;
 	import org.flixel.FlxState;
 	import org.flixel.FlxButton;
 	import org.flixel.FlxG;
@@ -10,6 +11,8 @@ package
 	 */
 	public class MenuState extends FlxState 
 	{
+		public var splash:FlxSprite;
+		
 		public var playbtn:FlxButton;
 		public var helpbtn:FlxButton;
 		public var creditbtn:FlxButton;
@@ -21,9 +24,19 @@ package
 			FlxG.bgColor = 0xff80CAFF;
 			FlxG.mouse.show();
 			
-			playbtn = new FlxButton(10, 10, "Play", play);
-			helpbtn = new FlxButton(10, 45, "Help", help);
-			creditbtn = new FlxButton(10, 80, "Credits", credits);
+			splash = new FlxSprite(0, 0, Assets.SPLASH);
+			splash.scrollFactor.x = splash.scrollFactor.y = 0;
+			add(splash);
+			
+			playbtn = new FlxButton(FlxG.width / 2 - 40, 340, "Play", play);
+			playbtn.scale.x = playbtn.scale.y = 2;
+			playbtn.label.size = 13;
+			helpbtn = new FlxButton(FlxG.width / 2 - 40, 385, "Help", help);
+			helpbtn.scale.x = helpbtn.scale.y = 2;
+			helpbtn.label.size = 13;
+			creditbtn = new FlxButton(FlxG.width / 2 - 40, 430, "Credits", credits);
+			creditbtn.scale.x = creditbtn.scale.y = 2;
+			creditbtn.label.size = 13;
 			disclaimer = new FlxText(10, 105, FlxG.width - 10,
 			"Disclaimer: This game requires two players. We're profoundly sorry if you have no friends nearby.");
 			disclaimer.color = 0xff000000;
@@ -38,7 +51,7 @@ package
 		
 		public function play():void
 		{
-			FlxG.switchState(new PlayState());
+			FlxG.switchState(new SelectState());
 		}
 		
 		public function credits():void

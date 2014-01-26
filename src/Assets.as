@@ -7,6 +7,12 @@ package
 	 */
 	public class Assets 
 	{
+		[Embed(source="../assets/images/Splash.png")]
+        public static const SPLASH:Class;
+		
+		[Embed(source="../assets/images/Train2.png")]
+        public static const TRAIN:Class;
+		
 		[Embed(source="../assets/images/Tuiles_32.png")]
         public static const FOREST:Class;
 		
@@ -37,9 +43,6 @@ package
 		[Embed(source="../assets/images/elephant.png")]
         public static const ELEPHANT:Class;
 		
-		[Embed(source="../assets/lvls/mapCSV_Group1_Map1.csv", mimeType="application/octet-stream")]
-		public static const LEVEL:Class;
-		
 		[Embed(source="../assets/insults.txt", mimeType="application/octet-stream")]
 		public static const INSULTS:Class;
 		
@@ -49,9 +52,15 @@ package
 		public static var CASUAL_INSULTS:Array = [];
 		public static var INSULTS_OF_DEATH:Array = [];
 		
-		public static var animals:Array = ["pig", "chicken", "turtle", "human", "chicken", "elephant"];
+		public static var animals:Array = ["pig", "chicken", "turtle", "human", "elephant"];
 		
 		public static var animaldict:Dictionary = new Dictionary();
+		
+		//Level embedding
+		[Embed(source="../assets/lvls/mapCSV_Group1_Map1.csv", mimeType="application/octet-stream")]
+		public static const LEVEL:Class;
+		
+		public static var lvls:Array = [LEVEL];
 		
 		public static function ParseInsults():void 
 		{

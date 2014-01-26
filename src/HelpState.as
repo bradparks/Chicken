@@ -4,12 +4,15 @@ package
 	import org.flixel.FlxButton;
 	import org.flixel.FlxG;
 	import org.flixel.FlxText;
+	import org.flixel.FlxSprite;
 	/**
 	 * ...
 	 * @author Ohmnivore
 	 */
 	public class HelpState extends FlxState 
 	{
+		public var splash:FlxSprite;
+		
 		public var backbtn:FlxButton;
 		
 		public var text:FlxText;
@@ -19,6 +22,10 @@ package
 			super.create();
 			FlxG.bgColor = 0xff80CAFF;
 			FlxG.mouse.show();
+			
+			splash = new FlxSprite(0, 0, Assets.SPLASH);
+			splash.scrollFactor.x = splash.scrollFactor.y = 0;
+			add(splash);
 			
 			backbtn = new FlxButton(10, 10, "Back to menu", goback);
 			//backbtn.exists = false;

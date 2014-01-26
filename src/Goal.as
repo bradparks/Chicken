@@ -11,7 +11,8 @@ package
 		public function Goal(X, Y) 
 		{
 			super(X, Y);
-			makeGraphic(100, 100, 0xff00ff00);
+			//makeGraphic(100, 100, 0xff);
+			loadGraphic(Assets.TRAIN);
 			
 			acceleration.y = 420;
 		}
